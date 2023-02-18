@@ -30,6 +30,17 @@ export default function NavBar() {
             </Link>
           )}
         </Tab>
+        <Tab as={Fragment}>
+          {({ selected }) => (
+            /* Use the `selected` state to conditionally style the selected tab. */
+            <Link
+              to="/profile"
+              className={selected ? styles.selected : styles.selectable}
+            >
+              Profile
+            </Link>
+          )}
+        </Tab>
       </Tab.List>
       <Tab.Panels>
         <Tab.Panel>Content 1</Tab.Panel>

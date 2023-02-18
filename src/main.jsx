@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Home, Discover } from './pages';
+import { Home, Discover, Profile } from './pages';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import { Layout } from './components';
@@ -18,6 +18,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <Discover />
+      </Layout>
+    )
+  },
+  {
+    path: '/profile/',
+    element: (
+      <Layout>
+        <Profile />
       </Layout>
     )
   }
