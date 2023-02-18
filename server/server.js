@@ -17,4 +17,12 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
+app.use((err, req, res, next) => {
+  const defErr = {
+    log: 'Express caught unknown middleware error.',
+    status: 500,
+    message: { err: 'An error occurred' }
+  };
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

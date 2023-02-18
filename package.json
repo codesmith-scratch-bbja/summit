@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --config webpack.config.js\""
+    "dev": "concurrently \"cross-env NODE_ENV=development nodemon server/server.js\" \"cross-env NODE_ENV=development webpack serve --config webpack.config.js\"",
+    "server": "nodemon server/server.js"
   },
   "author": "",
   "license": "ISC",
