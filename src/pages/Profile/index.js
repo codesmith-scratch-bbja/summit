@@ -1,22 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
-import { HorizontalScroll, PathWidget, Collection } from '../../components';
+import { PathWidget, Collection, SideBar, NewPathButton} from '../../components';
 
 export default function Profile() {
-  const [boulders, setBoulders] = useState([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+  const [goals, setGoals] = useState([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
   //API CALL
 
   return (
     <div>
       <h1>Profile</h1>
+      <SideBar />
+      <NewPathButton />
       <Collection>
-        <HorizontalScroll>
-          {boulders.map((boulder) => (
-            <PathWidget key={boulder.id} data={boulder} />
+          {goals.map((boulder) => (
+            <PathWidget key={goal.id} data={goal} />
           ))}
-        </HorizontalScroll>
       </Collection>
-      <Collection></Collection>
     </div>
   );
 }
