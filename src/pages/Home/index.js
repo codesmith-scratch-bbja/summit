@@ -6,8 +6,6 @@ export default function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <NavBar />
-      <Link to="/discover">Discover</Link>
       <HorizontalScroll>
         <PathWidget />
         <PathWidget />

@@ -3,15 +3,24 @@ import ReactDOM from 'react-dom/client';
 import { Home, Discover } from './pages';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
+import { Layout } from './components';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: (
+      <Layout>
+        <Home />
+      </Layout>
+    )
   },
   {
     path: '/discover',
-    element: <Discover />,
-  },
+    element: (
+      <Layout>
+        <Home />
+      </Layout>
+    )
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
