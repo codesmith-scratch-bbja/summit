@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     path: '/discover',
     element: (
       <Layout>
-        <Home />
+        <Discover />
       </Layout>
     )
   }
