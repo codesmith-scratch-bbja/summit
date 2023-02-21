@@ -8,6 +8,10 @@
   margin: 0;
 }
 
+*:focus {
+  outline: none;
+}
+
 html,
 body {
   height: 100%;
@@ -16,6 +20,7 @@ body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: hsl(60, 4%, 14%);
 }
 
 img,

@@ -1,0 +1,26 @@
+.collection {
+  width: 100%;
+}
+
+main {
+  width: min(80%, 1200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.signIn {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  color: white;
+  font-family: 'Gloock';
+  text-decoration: none;
+}
+
+.heading {
+  color: rgb(213, 213, 207);
+  font-family: 'Gloock';
+  align-self: start;
+}

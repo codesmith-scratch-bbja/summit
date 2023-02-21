@@ -11,7 +11,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/'
   },
   mode: process.env.NODE_ENV,
   devServer: {
@@ -19,10 +19,10 @@ module.exports = {
     proxy: {
       '/api/**': {
         target: 'http://localhost:3000/',
-        secure: false,
-      },
+        secure: false
+      }
     },
-    historyApiFallback: true,
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -30,25 +30,25 @@ module.exports = {
         test: /.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.(css|scss)$/,
         use: [
           isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
-      },
-    ],
+          'css-loader'
+        ]
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './src/index.html'
     }),
     new MiniCssExtractPlugin({
       filename: isDevelopment ? '[name].css' : '[name].[fullhash].css',
-      chunkFilename: isDevelopment ? '[id].css' : '[id].[fullhash].css',
-    }),
-  ],
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[fullhash].css'
+    })
+  ]
 };
