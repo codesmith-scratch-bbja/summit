@@ -1,5 +1,5 @@
 import PathWidget from './PathWidget';
-import HorizontalScroll from './HorizontalScroll';
+import HorizontalScroll from './PathWidgetDisplay';
 import NavBar from './NavBar';
 import Layout from './Layout/Layout';
 import ProgressBar from './ProgressBar/ProgressBar';
