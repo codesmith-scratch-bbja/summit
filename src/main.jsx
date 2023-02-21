@@ -1,16 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Home, Discover, Profile } from './pages';
+import { ClaireComponent, Layout, SideBar } from './components/';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
-import { Layout } from './components';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider
-} from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const router = createBrowserRouter([
   {

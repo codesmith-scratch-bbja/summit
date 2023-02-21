@@ -3,6 +3,10 @@ import { Tab } from '@headlessui/react';
 import React from 'react';
 import styles from './NavBar.module.css';
 import { Link } from 'react-router-dom';
+import { ProfilePic } from '../../components';
+
+const authLink =
+  'https://github.com/login/oauth/authorize?client_id=2fd7a075b391b262d9e5&redirect_uri=http://localhost:8080/api/auth';
 
 export default function NavBar() {
   return (
@@ -13,7 +17,6 @@ export default function NavBar() {
       <Tab.List as={'div'} className={styles.list}>
         <Tab as={Fragment}>
           {({ selected }) => (
-            /* Use the `selected` state to conditionally style the selected tab. */
             <Link
               to="/"
               className={selected ? styles.selected : styles.selectable}
@@ -24,7 +27,6 @@ export default function NavBar() {
         </Tab>
         <Tab as={Fragment}>
           {({ selected }) => (
-            /* Use the `selected` state to conditionally style the selected tab. */
             <Link
               to="/discover"
               className={selected ? styles.selected : styles.selectable}
@@ -35,7 +37,6 @@ export default function NavBar() {
         </Tab>
         <Tab as={Fragment}>
           {({ selected }) => (
-            /* Use the `selected` state to conditionally style the selected tab. */
             <Link
               to="/profile"
               className={selected ? styles.selected : styles.selectable}
@@ -45,7 +46,11 @@ export default function NavBar() {
           )}
         </Tab>
       </Tab.List>
-      <Tab.Panels>{/* <Tab.Panel>Content 1</Tab.Panel> */}</Tab.Panels>
+      <a href={authLink}>
+        <div className={styles.profilePic}>
+          <ProfilePic />
+        </div>
+      </a>
     </Tab.Group>
   );
 }

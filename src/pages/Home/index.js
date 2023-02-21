@@ -22,12 +22,30 @@ export default function Home() {
           />
         </HorizontalScroll>
       </Collection>
-      <a
-        className={styles.signIn}
-        href="https://github.com/login/oauth/authorize?client_id=2fd7a075b391b262d9e5&redirect_uri=http://localhost:8080/api/auth"
-      >
-        Sign in
-      </a>
     </main>
   );
+
+  // return (
+  //   <div>
+  //     <Board>
+  //       <Collection>
+  //         <h2>Set your own goals</h2>
+  //         <NewPathButton />
+  //         <PathWidgetDisplay>
+  //           {boulders.map((boulder) => (
+  //             <PathWidget key={boulder.id} data={boulder} />
+  //           ))}
+  //         </PathWidgetDisplay>
+  //       </Collection>
+  //       <Collection>
+  //         <h2>See what your friends are working on</h2>
+  //         <PathWidgetDisplay>
+  //           {friends.map((friend) => (
+  //             <PathWidget key={friend.id} data={friend} />
+  //           ))}
+  //         </PathWidgetDisplay>
+  //       </Collection>
+  //     </Board>
+  //   </div>
+  // );
 }
