@@ -1,9 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Outfit:wght@700&family=Space+Mono:wght@700&display=swap');
+:root {
+  --shadow-color: 0deg 0% 23%;
+  --shadow-elevation-low: 0.1px 0.3px 0.4px hsl(var(--shadow-color) / 0.34),
+    0.2px 0.6px 0.7px -1.2px hsl(var(--shadow-color) / 0.34),
+    0.5px 1.4px 1.7px -2.5px hsl(var(--shadow-color) / 0.34);
+  --shadow-elevation-medium: 0.1px 0.3px 0.4px hsl(var(--shadow-color) / 0.36),
+    0.4px 1.1px 1.3px -0.8px hsl(var(--shadow-color) / 0.36),
+    1px 2.8px 3.3px -1.7px hsl(var(--shadow-color) / 0.36),
+    2.4px 6.8px 8.1px -2.5px hsl(var(--shadow-color) / 0.36);
+  --shadow-elevation-high: 0.1px 0.3px 0.4px hsl(var(--shadow-color) / 0.34),
+    0.7px 2px 2.4px -0.4px hsl(var(--shadow-color) / 0.34),
+    1.3px 3.7px 4.4px -0.7px hsl(var(--shadow-color) / 0.34),
+    2.1px 6.1px 7.3px -1.1px hsl(var(--shadow-color) / 0.34),
+    3.4px 9.7px 11.6px -1.4px hsl(var(--shadow-color) / 0.34),
+    5.3px 15.2px 18.1px -1.8px hsl(var(--shadow-color) / 0.34),
+    8px 23.1px 27.5px -2.1px hsl(var(--shadow-color) / 0.34),
+    11.8px 34.1px 40.6px -2.5px hsl(var(--shadow-color) / 0.34);
+}
+.wrapper h4 {
+  font-size: 0.8rem;
+  text-align: center;
+  color: hsl(46, 15%, 17%);
+  text-shadow: 0 0 1px hsl(45, 66%, 87%);
+}
+
+.heading {
+  height: 2.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .wrapper {
-  border: 1px solid #000;
   border-radius: 10px;
   padding: 10px;
-  aspect-ratio: 1/1.5;
+  aspect-ratio: 0.8/1;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  background-color: hsl(44, 47%, 90%);
+  box-shadow: var(--shadow-elevation-medium);
+  font-family: 'Outfit';
+  font-weight: 700;
+  padding: 10px;
+}
+
+.content {
+  border-top: solid 1px rgb(201, 192, 192);
+  padding-top: 2px;
+  flex-grow: 1;
+}
+.progressBar {
+  justify-self: flex-end;
 }
 
 ::-webkit-scrollbar {

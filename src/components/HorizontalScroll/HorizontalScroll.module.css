@@ -4,4 +4,5 @@
   height: 200px;
   border: none;
   overflow-x: scroll;
+  padding: 10px;
 }

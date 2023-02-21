@@ -6,8 +6,11 @@ import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   return (
-    <Tab.Group>
-      <Tab.List>
+    <Tab.Group as={'div'} className={styles.wrapper}>
+      <Link to="/" className={`${styles.selectable} ${styles.logo}`}>
+        spires
+      </Link>
+      <Tab.List as={'div'} className={styles.list}>
         <Tab as={Fragment}>
           {({ selected }) => (
             /* Use the `selected` state to conditionally style the selected tab. */
@@ -42,10 +45,7 @@ export default function NavBar() {
           )}
         </Tab>
       </Tab.List>
-      <Tab.Panels>
-        <Tab.Panel>Content 1</Tab.Panel>
-        {/* ... */}
-      </Tab.Panels>
+      <Tab.Panels>{/* <Tab.Panel>Content 1</Tab.Panel> */}</Tab.Panels>
     </Tab.Group>
   );
 }
