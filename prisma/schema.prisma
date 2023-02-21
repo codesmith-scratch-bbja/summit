@@ -43,8 +43,8 @@ model TasksInGoals {
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String
-  type              String
+  userId            String 
+  type              String @default("user")
   provider          String
   providerAccountId String
   refresh_token     String? @db.Text
