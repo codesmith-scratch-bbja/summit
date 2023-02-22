@@ -6,11 +6,18 @@ import {
   Collection,
   SearchFieldModal
 } from '../../components';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Profile() {
+  const [searchParams] = useSearchParams();
+  const avatarURL = searchParams.get('avatar');
+
+  if (!localStorage.getItem('avatarURL'))
+    localStorage.setItem('avatarURL', avatarURL);
+
   const [isSearching, setIsSearching] = useState(false);
   const { isLoading, error, data } = useQuery('goalData', async () => {
     const response = await axios('/api/goal');
@@ -35,14 +42,23 @@ export default function Profile() {
     <main>
       <Collection>
         <HorizontalScroll>
-          {data.map((boulder) => (
-            <PathWidget
-              key={boulder.id}
-              title={boulder.title}
-              data={boulder}
-              complete={0.5}
-            />
-          ))}
+          {data &&
+            data.map((boulder, index) => (
+              <AnimatePresence>
+                <motion.div
+                  initial={{ x: -200 }}
+                  animate={{ x: 0 }}
+                  key={index}
+                >
+                  <PathWidget
+                    key={boulder.id}
+                    title={boulder.title}
+                    data={boulder}
+                    complete={0.5}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            ))}
           <PathWidget toggleModal={toggleModal} />
         </HorizontalScroll>
       </Collection>

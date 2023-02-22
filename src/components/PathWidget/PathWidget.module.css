@@ -23,7 +23,11 @@
   color: hsl(46, 15%, 17%);
   text-shadow: 0 0 1px hsl(45, 66%, 87%);
 }
-
+.specialHeader {
+  font-weight: bold;
+}
+.secondHeader {
+}
 .heading {
   height: 2.4rem;
   display: flex;

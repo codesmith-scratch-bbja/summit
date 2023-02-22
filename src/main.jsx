@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Home, Discover, Profile } from './pages';
+import { Home, Discover, Profile, Auth } from './pages';
 import { ClaireComponent, Layout, SideBar } from './components/';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
         <Profile />
       </Layout>
     )
+  },
+  {
+    path: '/auth/',
+    element: <Auth />
   }
 ]);
 
