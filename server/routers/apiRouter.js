@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const goalRouter = require('./goalRouter');
-// const taskRouter = require('./taskRouter');
 const authRouter = require('./authRouter');
 
 router.use((req, res, next) => {
@@ -13,6 +12,5 @@ router.use((req, res, next) => {
 
 router.use('/auth', authRouter);
 router.use('/goal', goalRouter);
-// router.use('/task', taskRouter);
 
 module.exports = router;

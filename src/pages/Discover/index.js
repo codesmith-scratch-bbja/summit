@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  Board,
-  Collection,
-  // PathWidgetDisplay,
-  PathWidget,
-  SideBar
-} from '../../components';
+import { Board, Collection } from '../../components';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 //Discover page displays Board and contains:
 // a sideBar that allows users to explore possible goals by topic
@@ -13,31 +9,21 @@ import {
 // and two Collections that offer users potential goals
 
 export default function Discover() {
-  const [travelBoulders, setTravel] = useState([]);
-  const [hobbyBoulders, setHobby] = useState([]);
-  //API call
+  const { isLoading, error, data } = useQuery('goalData', async () => {
+    const response = await axios('/api/goal/trending');
+    console.log('DATA', response.data);
+    return response.data;
+  });
+
+  if (isLoading) return 'Loading...';
+
+  if (error) return 'An error has occurred: ' + error.message;
 
   return (
     <div>
-      {/* <Board>
-        <SideBar />
-        <Collection>
-          <h2>Visit...</h2>
-          <PathWidgetDisplay>
-            {travelBoulders.map((boulder) => (
-              <PathWidget key={boulder.id} data={boulder} />
-            ))}
-          </PathWidgetDisplay>
-        </Collection>
-        <Collection>
-          <h2>Learn how to...</h2>
-          <PathWidgetDisplay>
-            {hobbyBoulders.map((boulder) => (
-              <PathWidget key={boulder.id} data={boulder} />
-            ))}
-          </PathWidgetDisplay>
-        </Collection>
-      </Board> */}
+      <Board>
+        <Collection spires={data} />
+      </Board>
     </div>
   );
 }

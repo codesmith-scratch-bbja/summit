@@ -3,9 +3,10 @@
   "ignorePatterns": ["**/test", "**/__tests__"],
   "env": {
     "node": true,
+    "browser": true,
     "es2021": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parserOptions": { "sourceType": "module" },
   "rules": {
     "no-unused-vars": ["off", { "vars": "local" }],

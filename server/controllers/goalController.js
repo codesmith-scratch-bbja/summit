@@ -5,13 +5,20 @@ const goalController = {
   getUserGoals: async (req, res, next) => {
     console.log('Getting user goals');
     try {
-      res.locals.allGoals = { message: `REQUEST RECEIVED TO GET ALL GOALS` };
+      res.locals.allGoals = { message: 'REQUEST RECEIVED TO GET ALL GOALS' };
       const userId = req.cookies.userId;
       console.log('Querying Db');
 
       const userGoals = await prisma.goal.findMany({
         where: {
           userId
+        },
+        include: {
+          tasks: {
+            include: {
+              task: true
+            }
+          }
         }
       });
 
@@ -31,6 +38,32 @@ const goalController = {
           message: { err: `An error occured: ${err}` }
         });
     }
+  },
+  addTask: async (req, res, next) => {
+    console.log('Adding task to goal');
+    const userId = req.cookies.userId;
+
+    const newTask = await prisma.goal.update({
+      where: {
+        id: Number(req.body.goalId)
+      },
+      data: {
+        tasks: {
+          create: [
+            {
+              task: {
+                create: {
+                  title: req.body.title
+                }
+              }
+            }
+          ]
+        }
+      }
+    });
+
+    res.locals.newTask = newTask;
+    next();
   },
 
   createGoal: async (req, res, next) => {
@@ -96,6 +129,15 @@ const goalController = {
         });
       }
     }
+  },
+  trendingGoals: async (req, res, next) => {
+    const trendingGoals = await prisma.goal.findMany({
+      where: {
+        trending: true
+      }
+    });
+    res.locals.trendingGoals = trendingGoals;
+    next();
   }
 };
 
