@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   HorizontalScroll,
   PathWidget,
@@ -7,24 +7,38 @@ import {
   SearchFieldModal
 } from '../../components';
 import { useSearchParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Profile() {
   const [searchParams] = useSearchParams();
   const avatarURL = searchParams.get('avatar');
+  const queryClient = useQueryClient();
 
-  if (!localStorage.getItem('avatarURL'))
-    localStorage.setItem('avatarURL', avatarURL);
+  const mutation = useMutation(
+    (newGoal) => {
+      return axios.post('/api/goal', newGoal);
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries();
+      }
+    }
+  );
+  useEffect(() => {
+    if (!localStorage.getItem('avatarURL'))
+      localStorage.setItem('avatarURL', avatarURL);
+  }, []);
 
   const [isSearching, setIsSearching] = useState(false);
   const { isLoading, error, data } = useQuery('goalData', async () => {
     const response = await axios('/api/goal');
+    console.log(response.data);
     return response.data;
   });
 
-  if (isLoading) return 'Loading...';
+  if (isLoading || data.length === 0) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
 
@@ -35,34 +49,13 @@ export default function Profile() {
 
   function postNewGoal(goal) {
     toggleModal();
-    axios.post('/api/goal', { title: goal });
+    mutation.mutate({ title: goal });
   }
-
+  const addNew = <PathWidget toggleModal={toggleModal} />;
   return (
     <main>
-      <Collection>
-        <HorizontalScroll>
-          {data &&
-            data.map((boulder, index) => (
-              <AnimatePresence>
-                <motion.div
-                  initial={{ x: -200 }}
-                  animate={{ x: 0 }}
-                  key={index}
-                >
-                  <PathWidget
-                    key={boulder.id}
-                    title={boulder.title}
-                    data={boulder}
-                    complete={0.5}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            ))}
-          <PathWidget toggleModal={toggleModal} />
-        </HorizontalScroll>
-      </Collection>
-      <Collection></Collection>
+      <Collection spires={data} lastChild={addNew} />
+
       {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
     </main>
   );

@@ -4,21 +4,21 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const prisma = require('../db.js');
 const { access } = require('fs');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const GITHUB_CLIENT_ID = '2fd7a075b391b262d9e5';
-const GITHUB_CLIENT_SECRET = '42b4c16c612d473ec86b48e1cd94d07de235262b';
-const GITHUB_URL = 'https://github.com/login/oauth/access_token';
-const GITHUB_USER_DATA = `https://api.github.com/user`;
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const GITHUB_URL = process.env.GITHUB_URL;
+const GITHUB_USER_DATA = process.env.GITHUB_USER_DATA;
 
-const DISCORD_URL = 'https://discord.com/api/oauth2/token';
-const DISCORD_ID = '1077746000585838644';
-const DISCORD_SECRET = 'vK6SXbzkJ_BdsTC7MtNDX9-eCKJWIp-s';
-const DISCORD_USER_DATA = `https://discord.com/api/users/@me`;
+const DISCORD_URL = process.env.DISCORD_URL;
+const DISCORD_ID = process.env.DISCORD_ID;
+const DISCORD_SECRET = process.env.DISCORD_SECRET;
+const DISCORD_USER_DATA = process.env.DISCORD_USER_DATA;
 
-const DISCORD_OAUTH =
-  'https://discord.com/api/oauth2/authorize?client_id=1077746000585838644&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify';
-
-const GITHUB_OAUTH = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=http://localhost:8080/api/auth/callback/github`;
+const DISCORD_OAUTH = process.env.DISCORD_OAUTH;
+const GITHUB_OAUTH = process.env.GITHUB_OAUTH;
 
 // Redirect login request to selected provider
 router.get('/login/:provider', (req, res) => {
@@ -43,6 +43,7 @@ router.get('/callback/:provider', async (req, res, next) => {
   let userDataURL;
   let usernameAccessString;
   let avatarURL;
+  let currentUserId;
 
   console.log('CODE', req.query.code);
 
