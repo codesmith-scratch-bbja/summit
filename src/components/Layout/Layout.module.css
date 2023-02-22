@@ -1,2 +1,5 @@
-
+/* Set the position to relative because side bar is fixed.  I did this so that side bar can stop overlapping with navbar (not working) */
+.section {
+    position: relative;
+}
 

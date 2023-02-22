@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { ProfilePic } from '../../components';
 
 export default function NavBar() {
-  return ( 
+  return (  
     <div className={styles.width}>
       <Tab.Group as={'div'} className={styles.wrapper}>
         <Link to="/" className={`${styles.selectable} ${styles.logo}`}>
@@ -23,7 +23,7 @@ export default function NavBar() {
               </Link>
             )}
           </Tab>
-
+ 
           { /*C & L added 'Goals' Tab to Navbar */}
           <Tab as={Fragment}>
             {({ selected }) => (

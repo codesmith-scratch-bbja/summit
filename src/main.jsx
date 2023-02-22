@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Home, Discover, Profile, Auth, Goal } from './pages';
-import { ClaireComponent, Layout, SideBar } from './components/';
+import { Layout, SideBar } from './components/';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -39,6 +39,7 @@ const router = createBrowserRouter([
     path: '/goal/',
     element:( 
       <Layout>
+        <SideBar />
         <Goal /> 
       </Layout>
     )

@@ -9,4 +9,5 @@ export default function Layout({ children }) {
       <main className={styles.section}>{children}</main>
     </div>
   );
-}
+}  
+ 
