@@ -6,26 +6,12 @@ const goalController = {
     console.log('Getting user goals');
     try {
       res.locals.allGoals = { message: `REQUEST RECEIVED TO GET ALL GOALS` };
-
-      // Check if session is valid and associated with user
-      // console.log(sessions);
-      // const session = sessions.get(req.cookies.session);
-      // const userId = req.query.user_id;
-      // console.log({ session, userId });
-      // if (!session) {
-      //   res.status(401).send('Unauthorized');
-      //   return;
-      // }
-
-      // if (session.userId !== Number(userId)) {
-      //   res.status(403).send('Forbidden');
-      //   return;
-      // }
+      const userId = req.cookies.userId;
       console.log('Querying Db');
 
       const userGoals = await prisma.goal.findMany({
         where: {
-          userId: 23
+          userId
         }
       });
 
@@ -48,18 +34,18 @@ const goalController = {
   },
 
   createGoal: async (req, res, next) => {
-    // destructure whatever is necessary from req.body for new path creation.
-
-    // create new path object here according to DB Schema.
+    console.log('Creating goal');
+    const userId = req.cookies.userId;
 
     try {
       // add to new path to DB.
       res.locals.newGoal = { message: 'REQUEST RECEIVED TO CREATE GOAL' };
       console.log(req.body);
+
       const newGoal = await prisma.goal.create({
         data: {
           title: req.body.title,
-          userId: Number(req.locals.userId)
+          userId
         }
       });
       res.locals.newGoal = newGoal;

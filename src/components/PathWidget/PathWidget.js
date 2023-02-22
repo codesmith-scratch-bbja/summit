@@ -4,17 +4,10 @@ import { ProgressBar } from '../../components';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-function PathWidget({ complete, title, data }) {
-  function handleClick() {
-    axios.post('/api/goal', {
-      title: 'New goal',
-      userId: 23
-    });
-  }
-
+function PathWidget({ complete, title, data, toggleModal }) {
   if (!complete && !data && !title)
     return (
-      <div onClick={handleClick} className={styles.wrapper}>
+      <div onClick={toggleModal} className={styles.wrapper}>
         <span style={{ margin: '0 auto' }}>+</span>
         <span style={{ margin: '0 auto' }}>Add a new path</span>
       </div>
