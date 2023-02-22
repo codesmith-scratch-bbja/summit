@@ -1,4 +1,5 @@
 const prisma = require('../db.js');
+const crypto = require('crypto');
 
 const sessionController = {};
 

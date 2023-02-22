@@ -3,9 +3,6 @@ const express = require('express');
 const router = express.Router();
 const app = express();
 
-const taskRouter = require('./taskRouter');
-app.use('/goal/task', taskRouter);
-
 const goalController = require('../controllers/goalController');
 const sessionController = require('../controllers/sessionController');
 
@@ -17,6 +14,20 @@ router.get(
     next();
   }
 );
+
+router.post('/task', goalController.addTask, (req, res, next) => {
+  res.status(200).json(res.locals.newTask);
+  next();
+});
+//adding middleware to query trending is true to populate
+
+router.get('/trending', goalController.trendingGoals, (req, res, next) => {
+  //if(trending), populate what user sees on /trending homepage
+  res.status(200).json(res.locals.trendingGoals);
+  //trendingGoal: async(req, res, next) => {
+  //  }
+  next();
+});
 
 router.post(
   '/',

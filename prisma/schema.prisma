@@ -18,6 +18,7 @@ model Goal {
   user      User           @relation(fields: [userId], references: [id])
   userId    String
   tasks     TasksInGoals[]
+  trending Boolean        @default(false)
 }
 
 model Task {
@@ -29,10 +30,11 @@ model Task {
 }
 
 model TasksInGoals {
-  task       Task     @relation(fields: [taskId], references: [id])
-  taskId     Int 
-  goal       Goal     @relation(fields: [goalId], references: [id])
-  goalId     Int 
+  task      Task    @relation(fields: [taskId], references: [id])
+  taskId    Int
+  goal      Goal    @relation(fields: [goalId], references: [id])
+  goalId    Int
+  completed Boolean @default(false)
 
   @@id([taskId, goalId])
 }

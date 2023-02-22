@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './PathWidget.module.css';
 import { ProgressBar } from '../../components';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
 function PathWidget({ complete, title, data, toggleModal }) {
   if (!complete && !data && !title)
@@ -31,3 +30,10 @@ function PathWidget({ complete, title, data, toggleModal }) {
 }
 
 export default PathWidget;
+
+PathWidget.propTypes = {
+  complete: PropTypes.number,
+  title: PropTypes.string,
+  data: PropTypes.object,
+  toggleModal: PropTypes.func
+};
