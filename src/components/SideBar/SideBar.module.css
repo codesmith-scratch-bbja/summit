@@ -1,0 +1,25 @@
+/* zindex?  We want it go beneath  the navbar */
+.wrapper {
+    height: 100%;
+    width: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--primary-light);
+    opacity: 0.2;
+    z-index: -1;
+}  
+ 
+
+/* CSS */
+/*
+.sidebar {
+    height: 100%;
+    width: 150px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 40px;
+    background-color: lightblue;
+    }
+*/

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Home, Discover, Profile, Auth, Goal } from './pages';
-import { ClaireComponent, Layout, SideBar } from './components/';
+import { Layout, SideBar } from './components/';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
         <Home />
       </Layout>
     )
-  },
+  }, 
   {
     path: '/discover',
     element: (
@@ -37,10 +37,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/goal/',
-    element: <Goal />
+    element:( 
+      <Layout>
+        <SideBar />
+        <Goal /> 
+      </Layout>
+    )
   }
 ]);
-
+ 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
 }
-
+ 
 .selectable {
   color: rgb(227, 222, 222);
   text-decoration: none;
@@ -23,6 +23,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  background-color: var(--primary-dark);
 }
 
 .wrapper {
