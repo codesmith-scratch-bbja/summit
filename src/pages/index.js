@@ -2,5 +2,6 @@ import Home from './Home';
 import Discover from './Discover';
 import Profile from './Profile';
 import Auth from './Auth';
+import Goal from './Goal';
 
-export { Home, Discover, Profile, Auth };
+export { Home, Discover, Profile, Auth, Goal };
