@@ -14,7 +14,7 @@ const router = createBrowserRouter([
         <Home />
       </Layout>
     )
-  },
+  }, 
   {
     path: '/discover',
     element: (
@@ -37,10 +37,14 @@ const router = createBrowserRouter([
   },
   {
     path: '/goal/',
-    element: <Goal />
+    element:( 
+      <Layout>
+        <Goal /> 
+      </Layout>
+    )
   }
 ]);
-
+ 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
