@@ -11,7 +11,7 @@ import GoalDescription from './GoalDescription/GoalDescription';
 import GoalTitle from './GoalTitle/GoalTitle';
 import SideBar from './SideBar/SideBar';
 import NewPathButton from './NewPathButton/NewPathButton';
-import ClaireComponent from './ClaireComponent/ClaireComponent';
+import SearchFieldModal from './SearchFieldModal/SearchFieldModal';
 
 export {
   NavBar,
@@ -27,5 +27,5 @@ export {
   GoalDescription,
   GoalTitle,
   NewPathButton,
-  ClaireComponent
+  SearchFieldModal
 };

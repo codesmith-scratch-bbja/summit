@@ -93,6 +93,7 @@ router.get('/', async (req, res, next) => {
   });
 
   res.cookie('session', session.sessionToken);
+  res.cookie('userId', currentUserId);
   res.redirect(`http://localhost:8080/profile`);
 });
 

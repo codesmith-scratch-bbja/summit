@@ -1,13 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
-import { HorizontalScroll, PathWidget, Collection } from '../../components';
+import {
+  HorizontalScroll,
+  PathWidget,
+  Collection,
+  SearchFieldModal
+} from '../../components';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
 export default function Profile() {
+  const [isSearching, setIsSearching] = useState(false);
   const { isLoading, error, data } = useQuery('goalData', async () => {
-    const response = await axios('/api/goal?user_id=23');
+    const response = await axios('/api/goal');
     return response.data;
   });
 
@@ -15,8 +21,18 @@ export default function Profile() {
 
   if (error) return 'An error has occurred: ' + error.message;
 
+  const toggleModal = () => {
+    console.log('Toggling');
+    setIsSearching(!isSearching);
+  };
+
+  function postNewGoal(goal) {
+    toggleModal();
+    axios.post('/api/goal', { title: goal });
+  }
+
   return (
-    <div>
+    <main>
       <Collection>
         <HorizontalScroll>
           {data.map((boulder) => (
@@ -27,10 +43,11 @@ export default function Profile() {
               complete={0.5}
             />
           ))}
-          <PathWidget />
+          <PathWidget toggleModal={toggleModal} />
         </HorizontalScroll>
       </Collection>
       <Collection></Collection>
-    </div>
+      {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
+    </main>
   );
 }
