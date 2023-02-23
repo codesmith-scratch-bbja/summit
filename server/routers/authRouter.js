@@ -3,7 +3,6 @@ const router = express.Router();
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const prisma = require('../db.js');
-const { access } = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -22,7 +21,9 @@ const GITHUB_OAUTH = process.env.GITHUB_OAUTH;
 
 // Redirect login request to selected provider
 router.get('/login/:provider', (req, res) => {
-  switch (req.params.provider) {
+  const provider = req.params.provider;
+  console.log({ provider });
+  switch (provider) {
     case 'github':
       res.redirect(GITHUB_OAUTH);
       break;
@@ -44,6 +45,7 @@ router.get('/callback/:provider', async (req, res, next) => {
   let usernameAccessString;
   let avatarURL;
   let currentUserId;
+  let username;
 
   console.log('CODE', req.query.code);
 
@@ -54,7 +56,7 @@ router.get('/callback/:provider', async (req, res, next) => {
         client_id: DISCORD_ID,
         client_secret: DISCORD_SECRET,
         grant_type: 'authorization_code',
-        redirect_uri: `http://localhost:8080/api/auth/callback/discord`,
+        redirect_uri: 'http://localhost:8080/api/auth/callback/discord',
         scope: 'identify',
         code: req.query.code
       });
@@ -135,6 +137,7 @@ router.get('/callback/:provider', async (req, res, next) => {
     console.log(foundUser);
     avatarURL = foundUser.user.image;
     currentUserId = foundUser.userId;
+    username = foundUser.user.name;
   }
 
   // if the search for the user is null, create a new user via their Github data.
@@ -145,13 +148,14 @@ router.get('/callback/:provider', async (req, res, next) => {
       userData.avatar_url ||
       `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
     // create a new user based on the Prisma schema.
+    username = userData[usernameAccessString];
     const newUser = await prisma.account.create({
       data: {
         provider,
         providerAccountId: String(userData.id),
         user: {
           create: {
-            name: userData[usernameAccessString],
+            name: username,
             image: avatarURL
           }
         },
@@ -171,10 +175,12 @@ router.get('/callback/:provider', async (req, res, next) => {
       sessionToken: crypto.randomBytes(18).toString('base64')
     }
   });
-
+  console.log(session);
   res.cookie('session', session.sessionToken);
+  console.log('Setting cookie');
+  res.cookie('loggedInAs', username);
   res.cookie('userId', currentUserId);
-  res.redirect(`http://localhost:8080/profile?avatar=${avatarURL}`);
+  res.redirect(`http://localhost:8080/${username}`);
 });
 
 module.exports = router;

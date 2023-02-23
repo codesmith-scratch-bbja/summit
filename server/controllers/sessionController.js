@@ -13,7 +13,10 @@ sessionController.isLoggedIn = async (req, res, next) => {
   const cookie = req.cookies.session;
   console.log({ cookie });
 
-  if (!cookie) return res.redirect('/');
+  if (!cookie) {
+    console.log('No cookie found');
+    return next({ log: 'No cookie found' });
+  }
 
   console.log('Validating session');
   const foundSession = await prisma.session.findUnique({
@@ -27,7 +30,7 @@ sessionController.isLoggedIn = async (req, res, next) => {
 
   if (foundSession.expires < new Date()) {
     console.log('Session expired');
-    return res.redirect('http://localhost:8080/');
+    return res.status(401).send('Session expired');
   }
 
   console.log('Moving to next middleware');

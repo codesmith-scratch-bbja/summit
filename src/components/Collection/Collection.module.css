@@ -1,11 +1,14 @@
 .wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  /* border: solid 1px red; */
 }
 
 .heading {
-  color: rgb(213, 213, 207);
+  color: rgb(21, 21, 20);
   font-family: 'Gloock';
   align-self: start;
   font-size: 1rem;

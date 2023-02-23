@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Home, Discover, Profile, Auth} from './pages';
+import { Home, Discover, Profile, Auth } from './pages';
 import { Layout, SideBar } from './components/';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useRouteError
+} from 'react-router-dom';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: (
-      <Layout>
-        <Home />
-      </Layout>
-    )
-  }, 
   {
     path: '/discover',
     element: (
@@ -24,19 +20,28 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/profile/',
+    path: '/:username',
     element: (
       <Layout>
         <Profile />
       </Layout>
-    )
+    ),
+    errorElement: <ErrorBoundary />
   },
   {
-    path: '/auth/',
+    path: '/auth',
     element: <Auth />
+  },
+  {
+    path: '/',
+    element: (
+      <Layout>
+        <Home />
+      </Layout>
+    )
   }
 ]);
- 
+
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -46,3 +51,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </QueryClientProvider>
   </React.StrictMode>
 );
+
+function ErrorBoundary() {
+  let error = useRouteError();
+  console.error(error);
+  // Uncaught ReferenceError: path is not defined
+  return <div>Dang!</div>;
+}

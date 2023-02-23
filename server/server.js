@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const apiRouter = require('./routers/apiRouter');
 
 // Serve the static files from the React app
-app.use('/', express.static(path.join(__dirname, 'client/build')));
+//app.use('/', express.static(path.join(__dirname, 'client/build')));
 
 app.use(express.json());
 app.use(cookieParser());

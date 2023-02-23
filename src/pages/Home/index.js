@@ -2,35 +2,90 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Collection, Board } from '../../components';
 import styles from './Home.module.css';
+import { useQueries } from 'react-query';
+import axios from 'axios';
 
 export default function Home() {
-  const userSpires = [
-    { title: 'Run a marathon', complete: Math.random() },
-    { title: 'Go to Paris', complete: Math.random() },
-    { title: 'Visit every AAA baseball stadium', complete: Math.random() },
-    { title: 'Get a passport', complete: Math.random() },
-    { title: 'Join a bowling league', complete: Math.random() }
-  ];
+  // Get self data, get friend data, get trending data
+  const [selfQuery, friendQuery, trendingQuery] = useQueries([
+    {
+      queryKey: 'self',
+      queryFn: async () => {
+        const response = await axios('/api/goal/');
+        return response.data;
+      }
+    },
+    {
+      queryKey: 'friends',
+      queryFn: async () => {
+        const response = await axios('/api/goal/friends');
+        return response.data;
+      }
+    },
+    {
+      queryKey: 'trending',
+      queryFn: async () => {
+        const response = await axios('/api/goal/trending');
+        return response.data;
+      }
+    }
+  ]);
+
+  const { isLoading, error, data: userSpires } = selfQuery;
+  const {
+    isLoading: friendLoading,
+    error: friendError,
+    data: friendSpires
+  } = friendQuery;
+  const {
+    isLoading: trendingLoading,
+    error: trendingError,
+    data: trendingSpires
+  } = trendingQuery;
 
   return (
-    <main>
-      <Board>
+    <section className={styles.wrapper}>
+      <div className={`${styles.first} ${styles.component}`}></div>
+      <div className={`${styles.second} ${styles.component}`}></div>
+      <div className={`${styles.third} ${styles.component}`}>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <Collection
+            styles={styles.collection}
+            title={'Your Spires'}
+            spires={userSpires}
+          />
+        )}
+      </div>
+
+      {/* {isLoading ? (
+        <div>Loading...</div>
+      ) : (
         <Collection
           styles={styles.collection}
           title={'Your Spires'}
           spires={userSpires}
-        /> 
+        />
+      )}
+      {friendLoading ? (
+        <div>Loading...</div>
+      ) : (
         <Collection
           styles={styles.collection}
           title={'Recent Friend Activity'}
-          spires={userSpires}
+          spires={friendSpires}
         />
+      )}
+      {trendingLoading ? (
+        <div>Loading...</div>
+      ) : (
         <Collection
           styles={styles.collection}
           title={'Trending'}
-          spires={userSpires}
+          spires={trendingSpires}
         />
-      </Board>
-    </main> 
+      )} */}
+    </section>
   );
 }

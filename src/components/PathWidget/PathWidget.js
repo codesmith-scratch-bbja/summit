@@ -1,34 +1,71 @@
 import React, { useState } from 'react';
 import styles from './PathWidget.module.css';
-import { ProgressBar } from '../../components';
+import { ProgressBar, AdoptGoalModal } from '../../components';
 import PropTypes from 'prop-types';
-//toggleModal is for 8-14
-function PathWidget({ complete, title, data, toggleModal, setActiveGoal }) {
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
+function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
   if (!complete && !data && !title)
     return (
       <div onClick={toggleModal} className={styles.wrapper}>
         <span style={{ margin: '0 auto' }}>+</span>
         <span style={{ margin: '0 auto' }}>Add a new path</span>
       </div>
-    );  
-  
-  // add showTaskBar function for each onClick 
-  return (
+    );
+  console.log(data);
+  const [isOpen, setIsOpen] = useState(false);
 
-    <div className={styles.wrapper} onClick={() => setActiveGoal(data.id)}>
-      <section className={styles.heading}>
-        <h4>{title}</h4>
-      </section> 
-      <div className={styles.content}>
-        <h6>Next:</h6>
+  const mutation = useMutation((adoptedGoal) => {
+    return axios.post('/api/goal/adopt', adoptedGoal);
+  });
+
+  function adoptGoal() {
+    console.log('adopting goal');
+    console.log(data);
+    const goalId = data.id;
+    const userId = 'cleg4r33a00017frkqbg7abhg';
+    mutation.mutate({ goalId, userId });
+    setIsOpen(false);
+  }
+
+  return (
+    <>
+      <div
+        onClick={handleFunc ? () => handleFunc(data) : () => setIsOpen(true)}
+        className={styles.wrapper}
+      >
+        <div className={styles.heading}>
+          <h4>{title}</h4>
+        </div>
+        <div className={styles.content}>
+          <div className={styles.statWrapper}>
+            <div className={styles.stat}>
+              <p>10</p>
+              <h6>Completed</h6>
+            </div>
+            <div className={styles.stat}>
+              <p>27</p>
+              <h6>Total</h6>
+            </div>
+          </div>
+          <ul>
+            <ListItem title={'Task one'} />
+            <ListItem title={'Task two'} />
+          </ul>
+        </div>
+        <div className={styles.progressBar}>
+          <ProgressBar progress={complete} />
+        </div>
       </div>
-      <div className={styles.progressBar}>
-        <ProgressBar progress={complete} />
-      </div>
-    </div>
+      <AdoptGoalModal
+        adoptGoal={adoptGoal}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+    </>
   );
-} 
+}
 
 export default PathWidget;
 
@@ -37,5 +74,15 @@ PathWidget.propTypes = {
   title: PropTypes.string,
   data: PropTypes.object,
   toggleModal: PropTypes.func,
-  setActiveGoal: PropTypes.func
+  handleFunc: PropTypes.func
 };
+
+function ListItem({ title, completed }) {
+  const [checked, setChecked] = useState(true);
+  return (
+    <li>
+      <input type="checkbox" defaultChecked={checked} />
+      <p>Test</p>
+    </li>
+  );
+}

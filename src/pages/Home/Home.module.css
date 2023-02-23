@@ -18,3 +18,43 @@ main {
   font-family: 'Gloock';
   text-decoration: none;
 }
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    'first second'
+    'third third';
+  gap: 5vh;
+}
+
+.third {
+  grid-area: third;
+  background-color: hsl(234, 79%, 27%);
+}
+
+.first {
+  grid-area: first;
+  background-color: rgb(225, 225, 223);
+}
+
+.second {
+  grid-area: second;
+  background-color: rgb(77, 131, 206);
+}
+
+.component {
+  --component-color: 194deg 100% 16%;
+  --component-shadow: 0.3px 0.8px 0.8px hsl(var(--component-color) / 0.68),
+    0.7px 2.1px 2.1px -1.3px hsl(var(--component-color) / 0.57),
+    2.1px 6.4px 6.3px -2.5px hsl(var(--component-color) / 0.45);
+
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  border: solid 0.5px hsla(0, 0%, 0%, 0.2);
+  padding: 20px;
+}
