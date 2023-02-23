@@ -1,63 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Space+Mono:wght@700&display=swap');
 .selected {
-  background-color: rgb(239, 236, 220);
-  color: rgb(39, 32, 32);
-  border-radius: 2rem;
-  text-decoration: none;
-  display: flex;
-  height: 2rem;
-  padding: 0 10px;
-  align-items: center;
-  justify-content: center;
-}
- 
-.selectable {
-  color: rgb(227, 222, 222);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: bold;
+  color: var(--primary-light-font);
 }
 
-.width {
-  width: 100%;
+.selectable {
+  color: var(--primary-light-font);
+  text-decoration: none;
   display: flex;
+  align-items: center;
   justify-content: center;
-  background-color: var(--primary-dark);
 }
 
 .wrapper {
+  height: 100vh;
+  width: clamp(200px, 15%, 350px);
+  background-color: var(--aside-background);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 0 30px;
   justify-content: space-between;
-  margin-top: 20px;
-  width: min(90%, 800px);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  /* border: solid 1px red; */
 }
 
 .list {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 60%;
-  height: 3rem;
-  border: none;
-  overflow-x: scroll;
-  font-size: 1.25rem;
-  font-family: 'Gloock';
-  border: solid 1px rgb(223, 218, 203);
-  border-radius: 3rem;
-  padding: 0 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.5rem;
+  height: 100%;
+  /* border: solid 1px green; */
 }
 
 .logo {
   font-family: 'Gloock';
-  font-size: 2rem;
-  color: rgb(242, 240, 227);
+  font-size: 2.5rem;
+  color: var(--primary-light-font);
   text-shadow: 0 0 1px rgb(208, 205, 190);
+  /* border: solid 1px green; */
+}
+
+.group {
+  height: 60%;
+  /* border: solid 1px blue; */
 }
 
 .profilePic {
-  height: 2rem;
-  width: 2rem;
+  margin-top: 40%;
+  height: 4rem;
+  width: 4rem;
+}
+
+.logout {
+  margin-top: auto;
+  justify-self: flex-end;
+  /* border: solid 1px black; */
 }

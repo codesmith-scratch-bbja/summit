@@ -15,4 +15,10 @@ router.use('/auth', authRouter);
 router.use('/goal', goalRouter);
 router.use('/user', userRouter);
 
+router.get('/profileredirect', (req, res, next) => {
+  console.log('Redirecting to profile');
+  const username = req.cookies.loggedInAs;
+  res.redirect(`/${username}`);
+});
+
 module.exports = router;

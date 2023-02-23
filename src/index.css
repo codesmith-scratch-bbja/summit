@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Space+Mono:wght@700&display=swap');
+
 :root {
-  --primary-color: 130;
+  --primary-color: 200;
+  --secondary-color: 50;
   --primary-light: hsla(var(--primary-color), 50%, 50%, 0.2);
   --primary-dark: hsl(var(--primary-color), 70%, 30%);
+  --main-background: hsl(var(--primary-color), 70%, 50%);
+  --aside-background: hsl(var(--secondary-color), 70%, 50%);
+  --primary-light-font: hsl(0, 5%, 90%);
+  --serif-font: 'Gloock', serif;
+  --mono-font: 'Space Mono', monospace;
 }
 
 *,
@@ -12,6 +20,7 @@
 
 * {
   margin: 0;
+  font-family: var(--serif-font);
 }
 
 *:focus {
@@ -26,9 +35,8 @@ body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  /* background-color: hsl(60, 4%, 14%); */
-  background-color: whitesmoke;
-  
+  background-color: var(--aside-background);
+  /* background-color: whitesmoke; */
 }
 
 img,

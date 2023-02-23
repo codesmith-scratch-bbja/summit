@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import styles from './PathWidget.module.css';
 import { ProgressBar, AdoptGoalModal } from '../../components';
 import PropTypes from 'prop-types';
-
-function PathWidget({ complete, title, data, toggleModal, setActiveGoal }) {
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
-
+function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
   if (!complete && !data && !title)
     return (
       <div onClick={toggleModal} className={styles.wrapper}>
@@ -33,8 +31,10 @@ import axios from 'axios';
 
   return (
     <>
-       //<div className={styles.wrapper} onClick={() => setActiveGoal(data.id)}>
-      <div onClick={() => setIsOpen(!isOpen)} className={styles.wrapper}>
+      <div
+        onClick={handleFunc ? () => handleFunc(data) : () => setIsOpen(true)}
+        className={styles.wrapper}
+      >
         <section className={styles.heading}>
           <h4>{title}</h4>
         </section>
@@ -53,7 +53,7 @@ import axios from 'axios';
       />
     </>
   );
-} 
+}
 
 export default PathWidget;
 
@@ -62,5 +62,5 @@ PathWidget.propTypes = {
   title: PropTypes.string,
   data: PropTypes.object,
   toggleModal: PropTypes.func,
-  setActiveGoal: PropTypes.func
+  handleFunc: PropTypes.func
 };

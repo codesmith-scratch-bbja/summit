@@ -1,5 +1,18 @@
-/* Set the position to relative because side bar is fixed.  I did this so that side bar can stop overlapping with navbar (not working) */
 .section {
-    position: relative;
+  --section-color: 48deg 100% 32%;
+  --shadow-elevation-medium: -0.8px 0px 1.1px hsl(var(--section-color) / 0.15),
+    -3px 0px 3.9px -0.4px hsl(var(--section-color) / 0.23),
+    -6.5px 0px 8.5px -0.8px hsl(var(--section-color) / 0.3),
+    -14.3px 0px 18.8px -1.2px hsl(var(--section-color) / 0.38);
+
+  background-color: var(--main-background);
+  border-radius: 50px 0 0 50px;
+  width: 100%;
+  box-shadow: var(--shadow-elevation-medium);
+  border: solid 1px hsla(0, 0%, 0%, 0.1);
+  padding: 3vw;
 }
 
+.layout {
+  display: flex;
+}

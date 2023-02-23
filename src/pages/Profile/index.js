@@ -1,26 +1,22 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
-  HorizontalScroll,
   PathWidget,
   Collection,
   SearchFieldModal,
-  Goal
+  Goal,
+  Board
 } from '../../components';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-import { AnimatePresence, motion } from 'framer-motion';
-import  styles  from './Profile.module.css'
+import styles from './Profile.module.css';
 import useStore from '../../store';
 
 export default function Profile() {
-  // pass props through Collection to Path Widget
-  // state - active goal -- id if its active, null if its not active
+  const location = useLocation();
+  const username = location.pathname.slice(1);
   const [activeGoal, setActiveGoal] = useState(null);
-  const [searchParams] = useSearchParams();
-  const avatarURL = searchParams.get('avatar');
-  const session = useStore((state) => state.session);
 
   const queryClient = useQueryClient();
 
@@ -38,19 +34,15 @@ export default function Profile() {
   const [isSearching, setIsSearching] = useState(false);
 
   const { isLoading, error, data } = useQuery('goalData', async () => {
-    const response = await axios('/api/goal');
+    // add data to body
+    const response = await axios('/api/goal', {
+      params: {
+        username: username
+      }
+    });
     if (!response.data) return [];
     return response.data;
   });
-
-  //* Added this to avoid the api fetch call, passing into spires for Collection Componenet
-  const fakeData = [
-    { title: 'Run a marathon', complete: Math.random(), id: Math.floor(Math.random() * 100)},
-    { title: 'Go to Paris', complete: Math.random(), id: Math.floor(Math.random() * 100)},
-    { title: 'Visit every AAA baseball stadium', complete: Math.random(), id: Math.floor(Math.random() * 100) },
-    { title: 'Get a passport', complete: Math.random(), id: Math.floor(Math.random() * 100) },
-    { title: 'Join a bowling league', complete: Math.random(), id: Math.floor(Math.random() * 100) }
-  ];
 
   if (isLoading) return 'Loading...';
 
@@ -59,7 +51,7 @@ export default function Profile() {
   const toggleModal = () => {
     console.log('Toggling');
     setIsSearching(!isSearching);
-  }; 
+  };
 
   function postNewGoal(goal) {
     toggleModal();
@@ -67,20 +59,26 @@ export default function Profile() {
   }
   const addNew = <PathWidget toggleModal={toggleModal} />;
 
-
   return (
     <main>
-
-     // <Collection spires={fakeData} lastChild={addNew}  /> 
-      
-      {data ? (
-        <Collection spires={data} lastChild={addNew} setActiveGoal={setActiveGoal} />
-      ) : (
-        <div>no spires</div>
-      )}
-      {activeGoal && < Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />}
+      <aside>
+        <h1 style={{ color: 'white' }}>{username}</h1>
+        {activeGoal && (
+          <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
+        )}
+      </aside>
+      <Board>
+        {data ? (
+          <Collection
+            spires={data}
+            lastChild={addNew}
+            handleFunc={setActiveGoal}
+          />
+        ) : (
+          <div>no spires</div>
+        )}
+      </Board>
       {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
-  
-    </main> 
+    </main>
   );
 }

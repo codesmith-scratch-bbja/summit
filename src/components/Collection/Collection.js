@@ -4,7 +4,8 @@ import { PathWidget, HorizontalScroll } from '../../components';
 import PropTypes from 'prop-types';
 
 function Collection({ spires, title, lastChild, setActiveGoal }) {
-
+  if (!spires || spires.length === 0) return <div>loading...</div>;
+  console.log(spires);
   return (
     <div className={styles.wrapper}>
       <h4 className={styles.heading}>{title}</h4>
@@ -17,9 +18,9 @@ function Collection({ spires, title, lastChild, setActiveGoal }) {
             title={spire.title}
             complete={spire.complete}
             setActiveGoal={setActiveGoal ? setActiveGoal : () => {}}
-          />   
+          />
         ))}
-        {lastChild && lastChild}
+        {lastChild}
       </HorizontalScroll>
     </div>
   );

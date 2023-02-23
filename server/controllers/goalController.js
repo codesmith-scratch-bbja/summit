@@ -5,15 +5,24 @@ const goalController = {
   getUserGoals: async (req, res, next) => {
     console.log('Getting user goals');
     try {
-      res.locals.allGoals = { message: 'REQUEST RECEIVED TO GET ALL GOALS' };
-      const userId = req.cookies.userId;
+      const { username } = req.query;
+
+      const user = await prisma.user.findFirst({
+        where: {
+          name: username
+        },
+        select: {
+          id: true
+        }
+      });
+
       console.log('Querying Db');
 
       const userGoals = await prisma.goal.findMany({
         where: {
           activeUsers: {
             some: {
-              id: userId
+              id: user.id
             }
           }
         },
@@ -22,7 +31,7 @@ const goalController = {
             include: {
               activeUsers: {
                 where: {
-                  id: userId
+                  id: user.id
                 },
                 select: {
                   name: true
@@ -30,7 +39,7 @@ const goalController = {
               },
               completedUsers: {
                 where: {
-                  id: userId
+                  id: user.id
                 },
                 select: {
                   name: true
@@ -43,6 +52,8 @@ const goalController = {
 
       if (!userGoals) {
         console.log('No data found');
+        res.locals.userGoals = [];
+        return next();
       }
       console.log(userGoals);
       res.locals.userGoals = userGoals;
@@ -60,8 +71,8 @@ const goalController = {
   },
   addTask: async (req, res, next) => {
     console.log('Adding task to goal');
-    //const userId = req.cookies.userId;
-    const userId = 'cleg4r33a00017frkqbg7abhg';
+    const userId = req.cookies.userId;
+    // const userId = 'cleg4r33a00017frkqbg7abhg';
 
     const newTask = await prisma.goal.update({
       where: {
@@ -234,6 +245,7 @@ const goalController = {
     }
   },
   trendingGoals: async (req, res, next) => {
+    console.log('Getting trending goals');
     const trendingGoals = await prisma.goal.findMany({
       where: {
         trending: true
