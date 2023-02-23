@@ -19,7 +19,7 @@ export default function Home() {
           styles={styles.collection}
           title={'Your Spires'}
           spires={userSpires}
-        />
+        /> 
         <Collection
           styles={styles.collection}
           title={'Recent Friend Activity'}
@@ -31,6 +31,6 @@ export default function Home() {
           spires={userSpires}
         />
       </Board>
-    </main>
+    </main> 
   );
 }

@@ -26,19 +26,6 @@ export default function NavBar() {
               </Link>
             )}
           </Tab>
-
-          {/*C & L added 'Goals' Tab to Navbar */}
-          <Tab as={Fragment}>
-            {({ selected }) => (
-              <Link
-                to="/goal"
-                className={selected ? styles.selected : styles.selectable}
-              >
-                Goals
-              </Link>
-            )}
-          </Tab>
-
           <Tab as={Fragment}>
             {({ selected }) => (
               <Link

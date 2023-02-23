@@ -3,7 +3,8 @@ import styles from './Collection.module.css';
 import { PathWidget, HorizontalScroll } from '../../components';
 import PropTypes from 'prop-types';
 
-function Collection({ spires, title, lastChild }) {
+function Collection({ spires, title, lastChild, setActiveGoal }) {
+
   return (
     <div className={styles.wrapper}>
       <h4 className={styles.heading}>{title}</h4>
@@ -12,10 +13,11 @@ function Collection({ spires, title, lastChild }) {
           <PathWidget
             // CHANGE THIS KEY
             key={index}
+            data={spire}
             title={spire.title}
             complete={spire.complete}
-            data={spire}
-          />
+            setActiveGoal={setActiveGoal ? setActiveGoal : () => {}}
+          />   
         ))}
         {lastChild && lastChild}
       </HorizontalScroll>
@@ -28,5 +30,6 @@ export default Collection;
 Collection.propTypes = {
   spires: PropTypes.array,
   title: PropTypes.string,
-  lastChild: PropTypes.node
+  lastChild: PropTypes.node,
+  setActiveGoal: PropTypes.func
 };
