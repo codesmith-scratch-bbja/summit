@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import styles from './PathWidget.module.css';
 import { ProgressBar, AdoptGoalModal } from '../../components';
 import PropTypes from 'prop-types';
-
-function PathWidget({ complete, title, data, toggleModal, setActiveGoal }) {
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
-
+function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
   if (!complete && !data && !title)
     return (
       <div onClick={toggleModal} className={styles.wrapper}>
@@ -33,14 +31,28 @@ import axios from 'axios';
 
   return (
     <>
-       //<div className={styles.wrapper} onClick={() => setActiveGoal(data.id)}>
-      <div onClick={() => setIsOpen(!isOpen)} className={styles.wrapper}>
-        <section className={styles.heading}>
+      <div
+        onClick={handleFunc ? () => handleFunc(data) : () => setIsOpen(true)}
+        className={styles.wrapper}
+      >
+        <div className={styles.heading}>
           <h4>{title}</h4>
-        </section>
+        </div>
         <div className={styles.content}>
-          <h6>Next:</h6>
-          {/* <p>{data.tasks[0].title}</p> */}
+          <div className={styles.statWrapper}>
+            <div className={styles.stat}>
+              <p>10</p>
+              <h6>Completed</h6>
+            </div>
+            <div className={styles.stat}>
+              <p>27</p>
+              <h6>Total</h6>
+            </div>
+          </div>
+          <ul>
+            <ListItem title={'Task one'} />
+            <ListItem title={'Task two'} />
+          </ul>
         </div>
         <div className={styles.progressBar}>
           <ProgressBar progress={complete} />
@@ -53,7 +65,7 @@ import axios from 'axios';
       />
     </>
   );
-} 
+}
 
 export default PathWidget;
 
@@ -62,5 +74,15 @@ PathWidget.propTypes = {
   title: PropTypes.string,
   data: PropTypes.object,
   toggleModal: PropTypes.func,
-  setActiveGoal: PropTypes.func
+  handleFunc: PropTypes.func
 };
+
+function ListItem({ title, completed }) {
+  const [checked, setChecked] = useState(true);
+  return (
+    <li>
+      <input type="checkbox" defaultChecked={checked} />
+      <p>Test</p>
+    </li>
+  );
+}

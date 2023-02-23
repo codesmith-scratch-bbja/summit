@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Home, Discover, Profile, Auth} from './pages';
+import { Home, Discover, Profile, Auth } from './pages';
 import { Layout, SideBar } from './components/';
 import {
   createBrowserRouter,
@@ -12,14 +12,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: (
-      <Layout>
-        <Home />
-      </Layout>
-    )
-  },
-  {
     path: '/discover',
     element: (
       <Layout>
@@ -28,7 +20,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/profile/',
+    path: '/:username',
     element: (
       <Layout>
         <Profile />
@@ -37,10 +29,17 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />
   },
   {
-    path: '/auth/',
+    path: '/auth',
     element: <Auth />
   },
-
+  {
+    path: '/',
+    element: (
+      <Layout>
+        <Home />
+      </Layout>
+    )
+  }
 ]);
 
 const queryClient = new QueryClient();

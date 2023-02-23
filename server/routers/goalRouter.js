@@ -22,10 +22,7 @@ router.post('/task', goalController.addTask, (req, res, next) => {
 });
 
 router.get('/trending', goalController.trendingGoals, (req, res, next) => {
-  //if(trending), populate what user sees on /trending homepage
   res.status(200).json(res.locals.trendingGoals);
-  //trendingGoal: async(req, res, next) => {
-  //  }
   next();
 });
 

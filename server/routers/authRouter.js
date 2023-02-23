@@ -45,6 +45,7 @@ router.get('/callback/:provider', async (req, res, next) => {
   let usernameAccessString;
   let avatarURL;
   let currentUserId;
+  let username;
 
   console.log('CODE', req.query.code);
 
@@ -136,6 +137,7 @@ router.get('/callback/:provider', async (req, res, next) => {
     console.log(foundUser);
     avatarURL = foundUser.user.image;
     currentUserId = foundUser.userId;
+    username = foundUser.user.name;
   }
 
   // if the search for the user is null, create a new user via their Github data.
@@ -146,13 +148,14 @@ router.get('/callback/:provider', async (req, res, next) => {
       userData.avatar_url ||
       `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
     // create a new user based on the Prisma schema.
+    username = userData[usernameAccessString];
     const newUser = await prisma.account.create({
       data: {
         provider,
         providerAccountId: String(userData.id),
         user: {
           create: {
-            name: userData[usernameAccessString],
+            name: username,
             image: avatarURL
           }
         },
@@ -172,15 +175,12 @@ router.get('/callback/:provider', async (req, res, next) => {
       sessionToken: crypto.randomBytes(18).toString('base64')
     }
   });
-
-  res.cookie('session', session.sessionToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    expires: new Date(Date.now() + 60 * 60 * 1000)
-  });
+  console.log(session);
+  res.cookie('session', session.sessionToken);
+  console.log('Setting cookie');
+  res.cookie('loggedInAs', username);
   res.cookie('userId', currentUserId);
-  res.redirect(`http://localhost:8080/profile`);
+  res.redirect(`http://localhost:8080/${username}`);
 });
 
 module.exports = router;
