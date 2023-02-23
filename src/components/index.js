@@ -16,6 +16,7 @@ import Task from './Task/Task';
 import TaskCheckbox from './TaskCheckbox/TaskCheckbox';
 import Goal from './Goal/Goal';
 import AdoptGoalModal from './AdoptGoalModal/AdoptGoalModal';
+import FollowButton from './FollowButton/FollowButton';
 
 export {
   NavBar,
@@ -35,5 +36,6 @@ export {
   Task,
   TaskCheckbox,
   Goal,
-  AdoptGoalModal
+  AdoptGoalModal,
+  FollowButton
 };

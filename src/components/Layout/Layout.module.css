@@ -12,6 +12,10 @@
   border: solid 1px hsla(0, 0%, 0%, 0.1);
   padding: 3vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .layout {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './PathWidget.module.css';
 import { ProgressBar, AdoptGoalModal } from '../../components';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 
 function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
@@ -15,17 +15,24 @@ function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
     );
   console.log(data);
   const [isOpen, setIsOpen] = useState(false);
-
-  const mutation = useMutation((adoptedGoal) => {
-    return axios.post('/api/goal/adopt', adoptedGoal);
-  });
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (adoptedGoal) => {
+      return axios.post('/api/goal/adopt', adoptedGoal);
+    },
+    {
+      onSuccess: () => {
+        console.log('success');
+        queryClient.invalidateQueries('self');
+      }
+    }
+  );
 
   function adoptGoal() {
     console.log('adopting goal');
     console.log(data);
     const goalId = data.id;
-    const userId = 'cleg4r33a00017frkqbg7abhg';
-    mutation.mutate({ goalId, userId });
+    mutation.mutate({ goalId });
     setIsOpen(false);
   }
 
@@ -86,3 +93,8 @@ function ListItem({ title, completed }) {
     </li>
   );
 }
+
+ListItem.propTypes = {
+  title: PropTypes.string,
+  completed: PropTypes.bool
+};

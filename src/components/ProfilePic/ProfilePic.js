@@ -1,19 +1,13 @@
 import React from 'react';
 import styles from './ProfilePic.module.css';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
-function ProfilePic() {
-  const {
-    isLoading,
-    error,
-    data: avatarUrl
-  } = useQuery('user', async () => {
-    const response = await axios('/api/user/avatar');
-    return response.data.image;
-  });
-
+function ProfilePic({ avatarUrl }) {
   return <img src={avatarUrl} className={styles.wrapper} />;
 }
 
 export default ProfilePic;
+
+ProfilePic.propTypes = {
+  avatarUrl: PropTypes.string.isRequired
+};

@@ -8,3 +8,25 @@
     height: 100vh;
     color: var(--primary-light-font);
 } 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: solid 1px red;
+  height: 100%;
+  width: 100%;
+}
+
+.userWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  height: 100px;
+}
+.collection {
+  height: 250px;
+  overflow: hidden;
+}
