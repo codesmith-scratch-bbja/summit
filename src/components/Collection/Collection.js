@@ -14,6 +14,7 @@ function Collection({ spires, title, lastChild }) {
             key={index}
             title={spire.title}
             complete={spire.complete}
+            data={spire}
           />
         ))}
         {lastChild && lastChild}

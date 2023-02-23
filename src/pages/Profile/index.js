@@ -1,19 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import {
-  HorizontalScroll,
-  PathWidget,
-  Collection,
-  SearchFieldModal
-} from '../../components';
+import { PathWidget, Collection, SearchFieldModal } from '../../components';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-import { AnimatePresence, motion } from 'framer-motion';
+import useStore from '../../store';
 
 export default function Profile() {
-  const [searchParams] = useSearchParams();
-  const avatarURL = searchParams.get('avatar');
+  const session = useStore((state) => state.session);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -26,19 +21,15 @@ export default function Profile() {
       }
     }
   );
-  useEffect(() => {
-    if (!localStorage.getItem('avatarURL'))
-      localStorage.setItem('avatarURL', avatarURL);
-  }, []);
 
   const [isSearching, setIsSearching] = useState(false);
   const { isLoading, error, data } = useQuery('goalData', async () => {
     const response = await axios('/api/goal');
-    console.log(response.data);
+    if (!response.data) return [];
     return response.data;
   });
 
-  if (isLoading || data.length === 0) return 'Loading...';
+  if (isLoading) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
 
@@ -54,7 +45,11 @@ export default function Profile() {
   const addNew = <PathWidget toggleModal={toggleModal} />;
   return (
     <main>
-      <Collection spires={data} lastChild={addNew} />
+      {data ? (
+        <Collection spires={data} lastChild={addNew} />
+      ) : (
+        <div>no spires</div>
+      )}
 
       {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
     </main>

@@ -3,7 +3,6 @@ const router = express.Router();
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const prisma = require('../db.js');
-const { access } = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -22,7 +21,9 @@ const GITHUB_OAUTH = process.env.GITHUB_OAUTH;
 
 // Redirect login request to selected provider
 router.get('/login/:provider', (req, res) => {
-  switch (req.params.provider) {
+  const provider = req.params.provider;
+  console.log({ provider });
+  switch (provider) {
     case 'github':
       res.redirect(GITHUB_OAUTH);
       break;
@@ -54,7 +55,7 @@ router.get('/callback/:provider', async (req, res, next) => {
         client_id: DISCORD_ID,
         client_secret: DISCORD_SECRET,
         grant_type: 'authorization_code',
-        redirect_uri: `http://localhost:8080/api/auth/callback/discord`,
+        redirect_uri: 'http://localhost:8080/api/auth/callback/discord',
         scope: 'identify',
         code: req.query.code
       });
@@ -172,9 +173,14 @@ router.get('/callback/:provider', async (req, res, next) => {
     }
   });
 
-  res.cookie('session', session.sessionToken);
+  res.cookie('session', session.sessionToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    expires: new Date(Date.now() + 60 * 60 * 1000)
+  });
   res.cookie('userId', currentUserId);
-  res.redirect(`http://localhost:8080/profile?avatar=${avatarURL}`);
+  res.redirect(`http://localhost:8080/profile`);
 });
 
 module.exports = router;
