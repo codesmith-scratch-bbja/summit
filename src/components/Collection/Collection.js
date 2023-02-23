@@ -3,12 +3,12 @@ import styles from './Collection.module.css';
 import { PathWidget, HorizontalScroll } from '../../components';
 import PropTypes from 'prop-types';
 
-function Collection({ spires, title, lastChild, setActiveGoal }) {
+function Collection({ spires, title, lastChild, setActiveGoal, handleFunc }) {
   if (!spires || spires.length === 0) return <div>loading...</div>;
   console.log(spires);
   return (
     <div className={styles.wrapper}>
-      <h4 className={styles.heading}>{title}</h4>
+      {/* <h4 className={styles.heading}>{title}</h4> */}
       <HorizontalScroll>
         {spires.map((spire, index) => (
           <PathWidget
@@ -18,6 +18,7 @@ function Collection({ spires, title, lastChild, setActiveGoal }) {
             title={spire.title}
             complete={spire.complete}
             setActiveGoal={setActiveGoal ? setActiveGoal : () => {}}
+            handleFunc={handleFunc}
           />
         ))}
         {lastChild}

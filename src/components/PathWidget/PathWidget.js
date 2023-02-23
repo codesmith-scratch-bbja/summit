@@ -35,12 +35,24 @@ function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
         onClick={handleFunc ? () => handleFunc(data) : () => setIsOpen(true)}
         className={styles.wrapper}
       >
-        <section className={styles.heading}>
+        <div className={styles.heading}>
           <h4>{title}</h4>
-        </section>
+        </div>
         <div className={styles.content}>
-          <h6>Next:</h6>
-          {/* <p>{data.tasks[0].title}</p> */}
+          <div className={styles.statWrapper}>
+            <div className={styles.stat}>
+              <p>10</p>
+              <h6>Completed</h6>
+            </div>
+            <div className={styles.stat}>
+              <p>27</p>
+              <h6>Total</h6>
+            </div>
+          </div>
+          <ul>
+            <ListItem title={'Task one'} />
+            <ListItem title={'Task two'} />
+          </ul>
         </div>
         <div className={styles.progressBar}>
           <ProgressBar progress={complete} />
@@ -64,3 +76,13 @@ PathWidget.propTypes = {
   toggleModal: PropTypes.func,
   handleFunc: PropTypes.func
 };
+
+function ListItem({ title, completed }) {
+  const [checked, setChecked] = useState(true);
+  return (
+    <li>
+      <input type="checkbox" defaultChecked={checked} />
+      <p>Test</p>
+    </li>
+  );
+}

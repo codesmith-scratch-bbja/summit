@@ -1,15 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Space+Mono:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Raleway:wght@700&display=swap');
 
 :root {
-  --primary-color: 200;
-  --secondary-color: 50;
+  --primary-color: 180;
+  --secondary-color: 47;
   --primary-light: hsla(var(--primary-color), 50%, 50%, 0.2);
   --primary-dark: hsl(var(--primary-color), 70%, 30%);
-  --main-background: hsl(var(--primary-color), 70%, 50%);
-  --aside-background: hsl(var(--secondary-color), 70%, 50%);
+  --main-background: hsl(var(--primary-color), 27%, 63%);
+  --aside-background: hsl(var(--secondary-color), 75%, 50%);
   --primary-light-font: hsl(0, 5%, 90%);
   --serif-font: 'Gloock', serif;
-  --mono-font: 'Space Mono', monospace;
+  --san-font: 'Raleway', monospace;
+  color: hsl(180, 27%, 62%);
 }
 
 *,

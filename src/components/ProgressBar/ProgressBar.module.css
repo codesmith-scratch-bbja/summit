@@ -4,18 +4,7 @@
   height: 100%;
   border-radius: 1rem;
   top: 0;
-}
-
-.red {
-  background-color: hsl(0, 90%, 32%);
-}
-
-.green {
-  background-color: hsl(100, 90%, 32%);
-}
-
-.yellow {
-  background-color: hsl(54, 86%, 44%);
+  background-color: white;
 }
 
 .wrapper {
@@ -31,4 +20,7 @@
   display: flex;
   z-index: 4;
   align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: solid 0.5px rgb(32, 31, 31);
 }

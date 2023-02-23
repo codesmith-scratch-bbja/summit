@@ -64,7 +64,9 @@ export default function Profile() {
       <aside>
         <h1 style={{ color: 'white' }}>{username}</h1>
         {activeGoal && (
-          <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
+          <div className={styles.activeGoal}>
+            <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
+          </div>
         )}
       </aside>
       <Board>
@@ -72,7 +74,7 @@ export default function Profile() {
           <Collection
             spires={data}
             lastChild={addNew}
-            handleFunc={setActiveGoal}
+            handleFunc={(data) => setActiveGoal(data)}
           />
         ) : (
           <div>no spires</div>

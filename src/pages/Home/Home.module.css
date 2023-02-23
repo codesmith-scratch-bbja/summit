@@ -33,17 +33,17 @@ main {
 
 .third {
   grid-area: third;
-  background-color: white;
+  background-color: hsl(234, 79%, 27%);
 }
 
 .first {
   grid-area: first;
-  background-color: white;
+  background-color: rgb(225, 225, 223);
 }
 
 .second {
   grid-area: second;
-  background-color: white;
+  background-color: rgb(77, 131, 206);
 }
 
 .component {
@@ -54,9 +54,7 @@ main {
 
   width: 100%;
   height: 100%;
-  background-color: #e0dddd;
   border-radius: 30px;
-  box-shadow: var(--component-shadow);
-  border: solid 1px hsla(0, 0%, 0%, 0.2);
+  border: solid 0.5px hsla(0, 0%, 0%, 0.2);
   padding: 20px;
 }

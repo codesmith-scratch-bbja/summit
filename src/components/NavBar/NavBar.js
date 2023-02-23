@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './NavBar.module.css';
 import { Link, useLocation } from 'react-router-dom';
 import { ProfilePic } from '../../components';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function getCookie(cname) {
   const name = cname + '=';
@@ -51,6 +52,8 @@ export default function NavBar() {
                 to="/"
                 className={selected ? styles.selected : styles.selectable}
               >
+                {' '}
+                <i className="bi bi-house-door"></i>
                 Home
               </Link>
             )}
@@ -61,6 +64,7 @@ export default function NavBar() {
                 to="/discover"
                 className={selected ? styles.selected : styles.selectable}
               >
+                <i className="bi bi-search"></i>
                 Discover
               </Link>
             )}
@@ -71,11 +75,13 @@ export default function NavBar() {
                 to={`/${username}`}
                 className={selected ? styles.selected : styles.selectable}
               >
+                <i className="bi bi-person-circle"></i>
                 Profile
               </Link>
             )}
           </Tab>
           <Link className={styles.logout} to="/logout">
+            <i className="bi bi-box-arrow-left"></i>
             Logout
           </Link>
         </Tab.List>

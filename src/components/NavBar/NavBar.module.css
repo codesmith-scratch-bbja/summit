@@ -1,19 +1,31 @@
-.selected {
-  font-weight: bold;
+.selected,
+.selectable,
+.logout {
   color: var(--primary-light-font);
+  font-size: 1.25rem;
+  font-family: var(--san-font) !important;
+  text-decoration: none;
+  line-height: 2.25rem;
+  display: flex;
+  gap: 10px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0.8;
+}
+.selectable:hover {
+  transform: scale(1.05);
+  opacity: 1;
 }
 
-.selectable {
-  color: var(--primary-light-font);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.selected {
+  color: rgb(100, 78, 13);
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .wrapper {
   height: 100vh;
-  width: clamp(200px, 15%, 350px);
+  /* COPY THIS FIELD TO GOAL WRAPPER ON PROFILE */
+  width: clamp(220px, 15%, 400px);
   background-color: var(--aside-background);
   display: flex;
   flex-direction: column;
@@ -30,14 +42,16 @@
   align-items: flex-start;
   font-size: 1.5rem;
   height: 100%;
+
   /* border: solid 1px green; */
 }
 
 .logo {
-  font-family: 'Gloock';
+  font-family: 'Gloock' !important;
   font-size: 2.5rem;
   color: var(--primary-light-font);
-  text-shadow: 0 0 1px rgb(208, 205, 190);
+  font-weight: 700;
+  opacity: 1;
   /* border: solid 1px green; */
 }
 
@@ -55,5 +69,6 @@
 .logout {
   margin-top: auto;
   justify-self: flex-end;
+  color: var(--primary-light-font);
   /* border: solid 1px black; */
 }
