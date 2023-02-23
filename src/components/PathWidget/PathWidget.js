@@ -19,7 +19,7 @@ function PathWidget({ complete, title, data, toggleModal, setActiveGoal }) {
     <div className={styles.wrapper} onClick={() => setActiveGoal(data.id)}>
       <section className={styles.heading}>
         <h4>{title}</h4>
-      </section>
+      </section> 
       <div className={styles.content}>
         <h6>Next:</h6>
       </div>

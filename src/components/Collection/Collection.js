@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 function Collection({ spires, title, lastChild, setActiveGoal }) {
 
-  return (
+  return ( 
     <div className={styles.wrapper}>
       <h4 className={styles.heading}>{title}</h4>
       <HorizontalScroll>
@@ -18,7 +18,7 @@ function Collection({ spires, title, lastChild, setActiveGoal }) {
             complete={spire.complete}
             setActiveGoal={setActiveGoal ? setActiveGoal : () => {}}
           />   
-        ))}
+        ))} 
         {lastChild && lastChild}
       </HorizontalScroll>
     </div>
