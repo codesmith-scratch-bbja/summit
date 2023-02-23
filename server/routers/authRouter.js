@@ -180,6 +180,7 @@ router.get('/callback/:provider', async (req, res, next) => {
   console.log('Setting cookie');
   res.cookie('loggedInAs', username);
   res.cookie('userId', currentUserId);
+  res.cookie('avatarUrl', avatarURL);
   res.redirect(`http://localhost:8080/${username}`);
 });
 

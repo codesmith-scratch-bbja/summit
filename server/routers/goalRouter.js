@@ -11,11 +11,6 @@ router.use(sessionController.isLoggedIn, (req, res, next) => {
   next();
 });
 
-router.get('/', goalController.getUserGoals, (req, res, next) => {
-  res.status(200).json(res.locals.userGoals);
-  next();
-});
-
 router.post('/task', goalController.addTask, (req, res, next) => {
   res.status(200).json(res.locals.newTask);
   next();
@@ -23,6 +18,16 @@ router.post('/task', goalController.addTask, (req, res, next) => {
 
 router.get('/trending', goalController.trendingGoals, (req, res, next) => {
   res.status(200).json(res.locals.trendingGoals);
+  next();
+});
+
+router.get('/friends', goalController.friendGoals, (req, res, next) => {
+  res.status(200).json(res.locals.friendGoals);
+  next();
+});
+
+router.get('/', goalController.getUserGoals, (req, res, next) => {
+  res.status(200).json(res.locals.userGoals);
   next();
 });
 

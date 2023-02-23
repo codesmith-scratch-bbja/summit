@@ -3,10 +3,14 @@ const prisma = require('../db.js');
 
 const goalController = {
   getUserGoals: async (req, res, next) => {
-    console.log('Getting user goals');
+    let username;
+    if (!req.query.username) {
+      username = req.cookies.loggedInAs;
+    } else {
+      username = req.query.username;
+    }
+    console.log('Getting user goals', username);
     try {
-      const { username } = req.query;
-
       const user = await prisma.user.findFirst({
         where: {
           name: username
@@ -179,7 +183,7 @@ const goalController = {
 
   adoptGoal: async (req, res, next) => {
     console.log('Adopting goal');
-    const userId = req.body.userId;
+    const userId = req.cookies.userId;
     const goalToAdopt = req.body.goalId;
     console.log('userId', userId, 'goalToAdopt', goalToAdopt);
     try {
@@ -252,6 +256,55 @@ const goalController = {
       }
     });
     res.locals.trendingGoals = trendingGoals;
+    next();
+  },
+  friendGoals: async (req, res, next) => {
+    console.log('Getting friends goals');
+    const userId = req.cookies.userId;
+    // console.log(req.query);
+    // const userId = req.query.userId;
+    console.log({ userId });
+    // Get following relation array
+    const data = await prisma.user.findUnique({
+      where: {
+        id: userId
+      },
+      select: {
+        following: {
+          select: {
+            id: true
+          }
+        }
+      }
+    });
+    console.log(data);
+    if (!data) {
+      console.log('No friends found');
+      res.locals.friendGoals = [];
+      return next();
+    }
+    const ids = data.following.map((user) => user.id);
+
+    // Get goals of all users within the followig relation array
+    const friendGoals = await prisma.user.findMany({
+      where: {
+        id: {
+          in: ids
+        }
+      },
+      select: {
+        name: true,
+        image: true,
+        activegoals: {
+          select: {
+            title: true,
+            id: true
+          }
+        }
+      }
+    });
+    console.log(friendGoals);
+    res.locals.friendGoals = friendGoals;
     next();
   }
 };
