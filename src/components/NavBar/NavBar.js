@@ -27,9 +27,11 @@ export default function NavBar() {
   const path = location.pathname;
   console.log({ path });
   const [username, setUsername] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
   useEffect(() => {
     setUsername(getCookie('loggedInAs'));
+    setAvatarUrl(getCookie('avatarUrl'));
   }, []);
 
   return (
@@ -40,7 +42,7 @@ export default function NavBar() {
 
       <a href="/auth">
         <div className={styles.profilePic}>
-          <ProfilePic />
+          <ProfilePic avatarUrl={avatarUrl} />
         </div>
       </a>
 

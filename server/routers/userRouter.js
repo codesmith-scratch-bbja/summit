@@ -13,4 +13,14 @@ router.get('/avatar', userController.getAvatar, (req, res, next) => {
   next();
 });
 
+router.get('/:username', userController.getProfileData, (req, res, next) => {
+  res.status(200).json(res.locals.profileData);
+  next();
+});
+
+router.post('/follow/:userId', userController.followUser, (req, res, next) => {
+  res.status(200).json(res.locals.actionTaken);
+  next();
+});
+
 module.exports = router;
