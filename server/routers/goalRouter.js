@@ -6,20 +6,20 @@ const app = express();
 const goalController = require('../controllers/goalController');
 const sessionController = require('../controllers/sessionController');
 
-router.get(
-  '/',
-  [sessionController.isLoggedIn, goalController.getUserGoals],
-  (req, res, next) => {
-    res.status(200).json(res.locals.userGoals);
-    next();
-  }
-);
+router.use(sessionController.isLoggedIn, (req, res, next) => {
+  console.log('In the goal router');
+  next();
+});
+
+router.get('/', goalController.getUserGoals, (req, res, next) => {
+  res.status(200).json(res.locals.userGoals);
+  next();
+});
 
 router.post('/task', goalController.addTask, (req, res, next) => {
   res.status(200).json(res.locals.newTask);
   next();
 });
-//adding middleware to query trending is true to populate
 
 router.get('/trending', goalController.trendingGoals, (req, res, next) => {
   //if(trending), populate what user sees on /trending homepage
@@ -38,13 +38,18 @@ router.post(
   }
 );
 
-router.patch('/:id', goalController.updateGoal, (req, res, next) => {
-  res.status(200).json(res.locals.updatedGoal);
+router.post('/adopt', goalController.adoptGoal, (req, res, next) => {
+  res.status(200).json(res.locals.adoptedGoal);
   next();
 });
 
-router.delete('/:id', goalController.deleteGoal, (req, res, next) => {
-  res.status(200).json(res.locals.deletedGoal);
+router.patch('/:taskId', goalController.completeTask, (req, res, next) => {
+  res.status(200).json({ message: 'Task completed' });
+  next();
+});
+
+router.delete('/:taskId', goalController.uncompleteTask, (req, res, next) => {
+  res.status(200).json({ message: 'Task uncompleted' });
   next();
 });
 
