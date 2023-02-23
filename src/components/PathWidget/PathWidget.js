@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './PathWidget.module.css';
 import { ProgressBar } from '../../components';
 import PropTypes from 'prop-types';
+//toggleModal is for 8-14
+function PathWidget({ complete, title, data, toggleModal, setActiveGoal }) {
 
-function PathWidget({ complete, title, data, toggleModal }) {
   if (!complete && !data && !title)
     return (
       <div onClick={toggleModal} className={styles.wrapper}>
         <span style={{ margin: '0 auto' }}>+</span>
         <span style={{ margin: '0 auto' }}>Add a new path</span>
       </div>
-    );
-
+    );  
+  
+  // add showTaskBar function for each onClick 
   return (
-    //<Link to="/profile">
-    <div className={styles.wrapper}>
+
+    <div className={styles.wrapper} onClick={() => setActiveGoal(data.id)}>
       <section className={styles.heading}>
         <h4>{title}</h4>
       </section>
@@ -25,9 +27,8 @@ function PathWidget({ complete, title, data, toggleModal }) {
         <ProgressBar progress={complete} />
       </div>
     </div>
-    //</Link>
   );
-}
+} 
 
 export default PathWidget;
 
@@ -35,5 +36,6 @@ PathWidget.propTypes = {
   complete: PropTypes.number,
   title: PropTypes.string,
   data: PropTypes.object,
-  toggleModal: PropTypes.func
+  toggleModal: PropTypes.func,
+  setActiveGoal: PropTypes.func
 };

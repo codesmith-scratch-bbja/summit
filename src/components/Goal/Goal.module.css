@@ -1,0 +1,17 @@
+
+.goalWindow{
+    height: 100%;
+    max-width: 300px;
+    /* position: fixed; */
+    /* top: 1;
+    left: 0; */
+    align-self: flex-start;
+    position: fixed;
+    top: 1;
+    left: 0;
+    background-color: var(--primary-light);
+}  
+
+.inner {
+    margin: 10px;
+}

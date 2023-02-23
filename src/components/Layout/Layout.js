@@ -8,6 +8,6 @@ export default function Layout({ children }) {
       <NavBar />
       <main className={styles.section}>{children}</main>
     </div>
-  );
+  ); 
 }  
  

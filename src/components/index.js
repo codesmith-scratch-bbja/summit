@@ -12,6 +12,9 @@ import GoalTitle from './GoalTitle/GoalTitle';
 import SideBar from './SideBar/SideBar';
 import NewPathButton from './NewPathButton/NewPathButton';
 import SearchFieldModal from './SearchFieldModal/SearchFieldModal';
+import Task from './Task/Task';
+import TaskCheckbox from './TaskCheckbox/TaskCheckbox';
+import Goal from './Goal/Goal';
 
 export {
   NavBar,
@@ -27,5 +30,8 @@ export {
   GoalDescription,
   GoalTitle,
   NewPathButton,
-  SearchFieldModal
+  SearchFieldModal,
+  Task,
+  TaskCheckbox,
+  Goal
 };
