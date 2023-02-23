@@ -125,14 +125,14 @@ export default function Profile() {
   }
 
   const addNew = <PathWidget toggleModal={toggleModal} />;
-
+ 
   return (
     <>
       <aside>
         {activeGoal && (
           <div className={styles.activeGoal}>
             <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
-          </div>
+          </div> 
         )}
       </aside>
       <article className={styles.wrapper}>

@@ -1,3 +1,13 @@
+.activeGoal {
+    background-color: var(--aside-background);
+    /* width: clamp(220px, 15%, 400px); */
+    width: max(200px, calc(15%));
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    color: var(--primary-light-font);
+} 
 .wrapper {
   display: flex;
   flex-direction: column;

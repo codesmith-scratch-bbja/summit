@@ -6,7 +6,7 @@ const port = 3000;
 const prisma = require('./db.js');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
-
+ 
 const apiRouter = require('./routers/apiRouter');
 
 // Serve the static files from the React app
