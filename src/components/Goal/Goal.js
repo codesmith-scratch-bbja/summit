@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 // eventually replace fake goal data with api using id
 export default function Goal({ activeGoal, setActiveGoal }) {
   console.log('ACTIVE', activeGoal);
-  return (
-    <div className={styles.goalWindow}>
-      <div className={styles.inner}>
+  return ( 
+    <div> 
+      <div>
         <button onClick={() => setActiveGoal(null)}> X </button>
         <GoalTitle title={activeGoal.title} />
         <GoalDescription description={activeGoal.description} />

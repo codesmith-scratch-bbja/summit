@@ -58,7 +58,7 @@ export default function Profile() {
     mutation.mutate({ title: goal });
   }
   const addNew = <PathWidget toggleModal={toggleModal} />;
-
+ 
   return (
     <main>
       <aside>
@@ -66,21 +66,19 @@ export default function Profile() {
         {activeGoal && (
           <div className={styles.activeGoal}>
             <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
-          </div>
+          </div> 
         )}
       </aside>
       <Board>
-        {data ? (
+        {(
           <Collection
             spires={data}
             lastChild={addNew}
             handleFunc={(data) => setActiveGoal(data)}
           />
-        ) : (
-          <div>no spires</div>
         )}
       </Board>
-      {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
+      {isSearching && <SearchFieldModal submitFunc={postNewGoal} />} 
     </main>
   );
 }

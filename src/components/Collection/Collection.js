@@ -4,7 +4,7 @@ import { PathWidget, HorizontalScroll } from '../../components';
 import PropTypes from 'prop-types';
 
 function Collection({ spires, title, lastChild, setActiveGoal, handleFunc }) {
-  if (!spires || spires.length === 0) return <div>loading...</div>;
+  // if (!spires || spires.length === 0) return <div>loading...</div>;
   console.log(spires);
   return (
     <div className={styles.wrapper}>
