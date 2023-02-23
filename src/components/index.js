@@ -16,6 +16,9 @@ import Task from './Task/Task';
 import TaskCheckbox from './TaskCheckbox/TaskCheckbox';
 import Goal from './Goal/Goal';
 
+import AdoptGoalModal from './AdoptGoalModal/AdoptGoalModal';
+
+
 export {
   NavBar,
   PathWidget,
@@ -34,4 +37,6 @@ export {
   Task,
   TaskCheckbox,
   Goal
+  AdoptGoalModal
+
 };

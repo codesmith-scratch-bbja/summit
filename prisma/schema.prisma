@@ -11,33 +11,49 @@ datasource db {
 }
 
 model Goal {
-  id        Int            @id @default(autoincrement())
-  title     String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  user      User           @relation(fields: [userId], references: [id])
-  userId    String
-  tasks     TasksInGoals[]
-  trending Boolean        @default(false)
+  id             Int      @id @default(autoincrement())
+  title          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  activeUsers    User[]   @relation("activeGoals")
+  completedUsers User[]   @relation("completedGoals")
+  tasks          Task[]
+  trending       Boolean  @default(false)
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  activegoals    Goal[]    @relation("activeGoals")
+  completedGoals Goal[]    @relation("completedGoals")
+  activeTasks    Task[]    @relation("activeTasks")
+  completedTasks Task[]    @relation("completedTasks")
 }
 
 model Task {
-  id        Int            @id @default(autoincrement())
-  title     String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  goals     TasksInGoals[]
+  id             Int      @id @default(autoincrement())
+  title          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  goals          Goal[]
+  activeUsers    User[]   @relation("activeTasks")
+  completedUsers User[]   @relation("completedTasks")
 }
 
-model TasksInGoals {
-  task      Task    @relation(fields: [taskId], references: [id])
-  taskId    Int
-  goal      Goal    @relation(fields: [goalId], references: [id])
-  goalId    Int
-  completed Boolean @default(false)
+// model TasksInGoals {
+//   task      Task    @relation(fields: [taskId], references: [id])
+//   taskId    Int
+//   goal      Goal    @relation(fields: [goalId], references: [id])
+//   goalId    Int
+//   completed Boolean @default(false)
 
-  @@id([taskId, goalId])
-}
+//   @@id([taskId, goalId])
+// }
 
 model Account {
   id                String  @id @default(cuid())
@@ -75,15 +91,4 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  goals         Goal[]
 }

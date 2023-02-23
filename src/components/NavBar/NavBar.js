@@ -2,11 +2,14 @@ import { Fragment } from 'react';
 import { Tab } from '@headlessui/react';
 import React from 'react';
 import styles from './NavBar.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ProfilePic } from '../../components';
 
 export default function NavBar() {
-  return (  
+  const location = useLocation();
+  const path = location.pathname;
+  console.log({ path });
+  return (
     <div className={styles.width}>
       <Tab.Group as={'div'} className={styles.wrapper}>
         <Link to="/" className={`${styles.selectable} ${styles.logo}`}>

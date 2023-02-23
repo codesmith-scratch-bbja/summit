@@ -1,0 +1,18 @@
+.buttons {
+  background-color: red;
+  font-family: 'Gloock';
+  border-radius: 10vh;
+  box-shadow: red;
+}
+
+.wrapper {
+  background-color: white;
+  width: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+}

@@ -12,6 +12,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import  styles  from './Profile.module.css'
+import useStore from '../../store';
 
 export default function Profile() {
   // pass props through Collection to Path Widget
@@ -19,6 +20,8 @@ export default function Profile() {
   const [activeGoal, setActiveGoal] = useState(null);
   const [searchParams] = useSearchParams();
   const avatarURL = searchParams.get('avatar');
+  const session = useStore((state) => state.session);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -31,16 +34,12 @@ export default function Profile() {
       }
     }
   );
-  useEffect(() => {
-    if (!localStorage.getItem('avatarURL'))
-      localStorage.setItem('avatarURL', avatarURL);
-  }, []);
 
   const [isSearching, setIsSearching] = useState(false);
 
   const { isLoading, error, data } = useQuery('goalData', async () => {
     const response = await axios('/api/goal');
-    console.log(response.data);
+    if (!response.data) return [];
     return response.data;
   });
 
@@ -53,7 +52,7 @@ export default function Profile() {
     { title: 'Join a bowling league', complete: Math.random(), id: Math.floor(Math.random() * 100) }
   ];
 
-  if (isLoading || data.length === 0) return 'Loading...';
+  if (isLoading) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
 
@@ -71,7 +70,14 @@ export default function Profile() {
 
   return (
     <main>
-      <Collection spires={fakeData} lastChild={addNew} setActiveGoal={setActiveGoal} /> 
+
+     // <Collection spires={fakeData} lastChild={addNew}  /> 
+      
+      {data ? (
+        <Collection spires={data} lastChild={addNew} setActiveGoal={setActiveGoal} />
+      ) : (
+        <div>no spires</div>
+      )}
       {activeGoal && < Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />}
       {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
   
