@@ -3,10 +3,6 @@ const crypto = require('crypto');
 
 const sessionController = {};
 
-/**
- * isLoggedIn - find the appropriate session for this request in the database, then
- * verify whether or not the session is still valid.
- */
 sessionController.isLoggedIn = async (req, res, next) => {
   console.log('Checking cookies');
 
@@ -34,7 +30,9 @@ sessionController.isLoggedIn = async (req, res, next) => {
   }
 
   console.log('Moving to next middleware');
-  res.locals.userId = foundSession.userId;
+  res.locals.id = foundSession.userId;
+  res.locals.username = foundSession.name;
+  res.locals.authenticated = true;
   next();
 };
 

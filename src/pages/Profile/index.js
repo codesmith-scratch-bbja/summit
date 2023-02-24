@@ -39,6 +39,13 @@ export default function Profile() {
   const [activeGoal, setActiveGoal] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [following, setFollowing] = useState(false);
+  const [ownProfile, setOwnProfile] = useState(false);
+
+  useEffect(() => {
+    if (loggedInAs === username) {
+      setOwnProfile(true);
+    }
+  }, [loggedInAs, username]);
 
   const [publicQuery, privateQuery] = useQueries([
     {
@@ -49,7 +56,7 @@ export default function Profile() {
         return response.data;
       },
       onSuccess: (data, variables, context) => {
-        console.log('Data received');
+        console.log('Publc data received');
         const { followedBy } = data;
         const isFollowing = followedBy.some((user) => user.name === loggedInAs);
         setFollowing(isFollowing);
@@ -58,11 +65,13 @@ export default function Profile() {
     {
       queryKey: 'private',
       queryFn: async () => {
+        console.log('Fetching private data');
         const response = await axios('/api/goal', {
           params: {
             username: username
           }
         });
+        console.log('Private data', response.data);
         if (!response.data) return [];
         return response.data;
       }
@@ -117,7 +126,7 @@ export default function Profile() {
 
   function postNewGoal(goal) {
     toggleModal();
-    mutation.mutate({ title: goal });
+    mutation.mutate(goal);
   }
 
   function toggleFollow() {
@@ -125,14 +134,14 @@ export default function Profile() {
   }
 
   const addNew = <PathWidget toggleModal={toggleModal} />;
- 
+
   return (
     <>
       <aside>
         {activeGoal && (
           <div className={styles.activeGoal}>
             <Goal activeGoal={activeGoal} setActiveGoal={setActiveGoal} />
-          </div> 
+          </div>
         )}
       </aside>
       <article className={styles.wrapper}>
@@ -144,11 +153,13 @@ export default function Profile() {
           )}
         </div>
         <section className={styles.collection}>
+          (
           <Collection
-            spires={data.activegoals}
-            lastChild={addNew}
+            spires={privateData ? privateData : data.activegoals}
+            lastChild={ownProfile && addNew}
             handleFunc={(data) => setActiveGoal(data)}
           />
+          )
         </section>
         {isSearching && <SearchFieldModal submitFunc={postNewGoal} />}
       </article>

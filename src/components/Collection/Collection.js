@@ -4,6 +4,8 @@ import { PathWidget, HorizontalScroll } from '../../components';
 import PropTypes from 'prop-types';
 
 function Collection({ spires, title, lastChild, setActiveGoal, handleFunc }) {
+  console.log({ spires });
+
   return (
     <div className={styles.wrapper}>
       {/* <h4 className={styles.heading}>{title}</h4> */}

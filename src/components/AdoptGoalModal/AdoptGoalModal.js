@@ -13,18 +13,16 @@ function AdoptGoalModal({ isOpen, setIsOpen, adoptGoal }) {
     //use static as={motion.div} for framer motion
     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
       <Dialog.Panel className={styles.wrapper}>
-        <Dialog.Title>Add Goal</Dialog.Title>
-        <Dialog.Description>
-          This will add a goal to your profile!
+        <Dialog.Title>Adopt Spire</Dialog.Title>
+        <Dialog.Description style={{ color: 'gray' }}>
+          <p>This will add this spire's scaffolding to your profile!</p>
+          <p>Are you sure?</p>
         </Dialog.Description>
-
-        <p>Are you sure you want to add a goal to your profile?</p>
-
-        <button className={styles.buttons} onClick={adoptGoal}>
-          Add
-        </button>
-        <button className={styles.buttons} onClick={() => setIsOpen(false)}>
+        <button className={styles.cancel} onClick={() => setIsOpen(false)}>
           Cancel
+        </button>
+        <button className={styles.add} onClick={adoptGoal}>
+          Add
         </button>
       </Dialog.Panel>
     </Dialog>

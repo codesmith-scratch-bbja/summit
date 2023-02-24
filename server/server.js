@@ -1,12 +1,10 @@
-//Express boilerplate
 const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3000;
-const prisma = require('./db.js');
 const cookieParser = require('cookie-parser');
-const crypto = require('crypto');
- 
+const session = require('express-session');
+
 const apiRouter = require('./routers/apiRouter');
 
 // Serve the static files from the React app
@@ -14,6 +12,15 @@ const apiRouter = require('./routers/apiRouter');
 
 app.use(express.json());
 app.use(cookieParser());
+
+// app.use(
+//   session({
+//     secret: 'secret',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
+//   })
+// );
 
 app.use('/api', apiRouter);
 

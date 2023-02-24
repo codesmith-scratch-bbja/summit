@@ -13,9 +13,10 @@ function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
         <span style={{ margin: '0 auto' }}>Add a new path</span>
       </div>
     );
-  console.log(data);
+  console.log({ data });
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
+
   const mutation = useMutation(
     (adoptedGoal) => {
       return axios.post('/api/goal/adopt', adoptedGoal);
@@ -39,30 +40,67 @@ function PathWidget({ complete, title, data, toggleModal, handleFunc }) {
   return (
     <>
       <div
-        onClick={handleFunc ? () => handleFunc(data) : () => setIsOpen(true)}
+        onClick={handleFunc ? () => {} : () => setIsOpen(true)}
         className={styles.wrapper}
       >
         <div className={styles.heading}>
           <h4>{title}</h4>
         </div>
+        {handleFunc && (
+          <button className={styles.edit} onClick={() => handleFunc(data)}>
+            Edit
+          </button>
+        )}
+        {data.image && (
+          <div className={styles.avatar}>
+            <img src={data.image} />
+          </div>
+        )}
+        {/* <p>{JSON.stringify(data)}</p> */}
         <div className={styles.content}>
           <div className={styles.statWrapper}>
             <div className={styles.stat}>
-              <p>10</p>
+              <p>
+                {data.tasks &&
+                  data.tasks.reduce((acc, task) => {
+                    if (task.completedUsers.length) {
+                      acc += 1;
+                    }
+                    return acc;
+                  }, 0)}
+              </p>
               <h6>Completed</h6>
             </div>
             <div className={styles.stat}>
-              <p>27</p>
+              {data.tasks && <p>{data.tasks.length}</p>}
               <h6>Total</h6>
             </div>
           </div>
           <ul>
-            <ListItem title={'Task one'} />
-            <ListItem title={'Task two'} />
+            {data.tasks &&
+              data.tasks.map((task, index) => (
+                <ListItem
+                  key={index}
+                  id={task.id}
+                  title={task.title}
+                  completed={task.completedUsers.length}
+                />
+              ))}
           </ul>
         </div>
         <div className={styles.progressBar}>
-          <ProgressBar progress={complete} />
+          <ProgressBar
+            progress={
+              data.tasks
+                ? data.tasks.reduce((acc, task) => {
+                    if (task.completedUsers.length) {
+                      acc += 1;
+                    }
+                    return acc;
+                  }, 0) / data.tasks.length
+                : 0
+            }
+          />
         </div>
       </div>
       <AdoptGoalModal
@@ -84,17 +122,29 @@ PathWidget.propTypes = {
   handleFunc: PropTypes.func
 };
 
-function ListItem({ title, completed }) {
-  const [checked, setChecked] = useState(true);
+function ListItem({ title, id, completed }) {
+  const [checked, setChecked] = useState(completed);
+  function handleClick() {
+    if (checked) {
+      setChecked(false);
+      axios.delete(`/api/goal/${id}`);
+    } else {
+      setChecked(true);
+      axios.patch(`/api/goal/${id}`);
+    }
+
+    console.log('Toggling');
+  }
   return (
     <li>
-      <input type="checkbox" defaultChecked={checked} />
-      <p>Test</p>
+      <input onClick={handleClick} type="checkbox" defaultChecked={checked} />
+      <p>{title}</p>
     </li>
   );
 }
 
 ListItem.propTypes = {
   title: PropTypes.string,
-  completed: PropTypes.bool
+  completed: PropTypes.bool,
+  id: PropTypes.string
 };

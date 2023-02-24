@@ -31,7 +31,23 @@ main {
   gap: 5vh;
 }
 
+.button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  opacity: 50%;
+}
+.buttonWrapper {
+  position: absolute;
+  top: 6px;
+}
+
+.selected {
+  opacity: 1;
+}
+
 .third {
+  position: relative;
   grid-area: third;
   background-color: hsl(234, 79%, 27%);
 }

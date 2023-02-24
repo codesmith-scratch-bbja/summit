@@ -59,7 +59,7 @@ const goalController = {
         res.locals.userGoals = [];
         return next();
       }
-      console.log(userGoals);
+      console.log({ userGoals });
       res.locals.userGoals = userGoals;
       next();
     } catch (err) {
@@ -103,7 +103,8 @@ const goalController = {
   },
   completeTask: async (req, res, next) => {
     console.log('Marking task complete');
-    const userId = 'cleg4r33a00017frkqbg7abhg';
+    //const userId = 'cleg4r33a00017frkqbg7abhg';
+    const { userId } = req.cookies;
 
     const toggled = await prisma.user.update({
       where: {
@@ -129,7 +130,8 @@ const goalController = {
   },
   uncompleteTask: async (req, res, next) => {
     console.log('Marking task as incomplete');
-    const userId = 'cleg4r33a00017frkqbg7abhg';
+    //const userId = 'cleg4r33a00017frkqbg7abhg';
+    const { userId } = req.cookies;
     const toggled = await prisma.user.update({
       where: {
         id: userId
@@ -165,6 +167,18 @@ const goalController = {
             connect: {
               id: userId
             }
+          },
+          tasks: {
+            create: req.body.tasks.map((task) => {
+              return {
+                title: task.title,
+                activeUsers: {
+                  connect: {
+                    id: userId
+                  }
+                }
+              };
+            })
           }
         }
       });

@@ -1,21 +1,29 @@
 .activeGoal {
-    background-color: var(--aside-background);
-    /* width: clamp(220px, 15%, 400px); */
-    width: max(200px, calc(15%));
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    color: var(--primary-light-font);
-} 
+  background-color: var(--aside-background);
+  /* width: clamp(220px, 15%, 400px); */
+  width: clamp(220px, 15%, 400px);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  color: var(--primary-light-font);
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  border: solid 1px red;
+  /* border: solid 1px red; */
   height: 100%;
   width: 100%;
+}
+
+.button {
+  background-color: none;
+  border: none;
+  color: white;
 }
 
 .userWrapper {
@@ -27,6 +35,6 @@
   height: 100px;
 }
 .collection {
-  height: 250px;
-  overflow: hidden;
+  height: 260px;
+  /* border: solid 1px red; */
 }

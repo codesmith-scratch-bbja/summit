@@ -45,7 +45,7 @@ export default function Home() {
 
         response.data.forEach((user) => {
           user.activegoals.forEach((goal) => {
-            goalArray.push(goal);
+            goalArray.push({ ...goal, image: user.image });
           });
         });
         console.log({ goalArray });
@@ -120,15 +120,35 @@ export default function Home() {
       <div className={`${styles.first} ${styles.component}`}></div>
       <div className={`${styles.second} ${styles.component}`}></div>
       <div className={`${styles.third} ${styles.component}`}>
-        <button type="button" onClick={() => setTab('self')}>
-          Your Spires
-        </button>
-        <button type="button" onClick={() => setTab('friends')}>
-          Friends Spires
-        </button>
-        <button type="button" onClick={() => setTab('trending')}>
-          Trending Spires
-        </button>
+        <nav className={styles.buttonWrapper}>
+          <button
+            className={`${styles.button} ${
+              tab === 'self' ? styles.selected : ''
+            }`}
+            type="button"
+            onClick={() => setTab('self')}
+          >
+            Your Spires
+          </button>
+          <button
+            className={`${styles.button} ${
+              tab === 'friends' ? styles.selected : ''
+            }`}
+            type="button"
+            onClick={() => setTab('friends')}
+          >
+            Friends Spires
+          </button>
+          <button
+            className={`${styles.button} ${
+              tab === 'trending' ? styles.selected : ''
+            }`}
+            type="button"
+            onClick={() => setTab('trending')}
+          >
+            Trending Spires
+          </button>
+        </nav>
         {displayed}
       </div>
     </section>
