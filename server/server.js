@@ -1,26 +1,39 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import redis from 'connect-redis';
+import { createClient } from 'redis';
+
 const app = express();
 const port = 3000;
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
 
-const apiRouter = require('./routers/apiRouter');
+// Routers
+import apiRouter from './routers/apiRouter.js';
+import sessionController from './controllers/sessionController.js';
+
+const RedisStore = redis(session);
+
+const redisClient = createClient({ legacyMode: true });
+redisClient.connect().catch(console.error);
 
 // Serve the static files from the React app
-//app.use('/', express.static(path.join(__dirname, 'client/build')));
+// app.use('/', express.static(path.join(__dirname, 'client/build')));
 
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(
-//   session({
-//     secret: 'secret',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
-//   })
-// );
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
+  })
+);
+
+app.use(sessionController.isAuthenticated);
 
 app.use('/api', apiRouter);
 

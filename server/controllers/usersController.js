@@ -1,5 +1,6 @@
-const prisma = require('../db.js');
-
+// const prisma = require('../db.js');
+import prisma from '../db.js';
+import { formatGoals } from './goalsController.js';
 const userController = {};
 
 userController.getAvatar = async (req, res, next) => {
@@ -66,14 +67,46 @@ userController.getUserId = async (req, res, next) => {
   }
 };
 
+userController.getSessionData = async (req, res, next) => {
+  console.log('Getting session data!');
+  if (res.locals.authenticated) {
+    const { user } = req.session;
+    const { name, avatarUrl, id } = user;
+    res.locals.sessionData = { id, name, avatarUrl };
+  }
+  return next();
+};
+
 userController.getProfileData = async (req, res, next) => {
   console.log('Getting user profile data');
-  try {
-    const { username } = req.params;
+  const { username: requestedProfileName } = req.params;
+  console.log({ requestedProfileName });
+  if (res.locals.authenticated) {
+    console.log('Checking if profile is own profile');
+    res.locals.isOwnProfile = req.session.user.name === requestedProfileName;
+  } else {
+    res.locals.isOwnProfile = false;
+  }
 
-    const profileData = await prisma.user.findFirst({
+  try {
+    const profileUser = await prisma.user.findFirst({
       where: {
-        name: username
+        name: requestedProfileName
+      },
+      select: {
+        id: true
+      }
+    });
+
+    if (!profileUser) {
+      console.log('No data found');
+      res.locals.profileData = {};
+      return next();
+    }
+
+    const profileData = await prisma.user.findUnique({
+      where: {
+        id: profileUser.id
       },
       select: {
         id: true,
@@ -92,10 +125,59 @@ userController.getProfileData = async (req, res, next) => {
           select: {
             title: true
           }
+        },
+        activegoals: {
+          select: {
+            id: true,
+            title: true,
+            tasks: {
+              select: {
+                id: true,
+                title: true,
+                completedUsers: {
+                  where: {
+                    id: profileUser.id
+                  }
+                }
+              }
+            }
+          }
+        },
+        completedGoals: {
+          select: {
+            id: true,
+            title: true,
+            tasks: {
+              select: {
+                id: true,
+                title: true,
+                completedUsers: {
+                  where: {
+                    id: profileUser.id
+                  }
+                }
+              }
+            }
+          }
         }
       }
     });
-    res.locals.profileData = profileData;
+    const formattedActiveGoals = formatGoals(profileData.activegoals);
+    const formattedCompletedGoals = formatGoals(profileData.completedGoals);
+
+    const isFollowing = profileData.followedBy.some(
+      (user) => user.name === req.session.user.name
+    );
+
+    const formattedData = {
+      ...profileData,
+      activeGoals: formattedActiveGoals,
+      completedGoals: formattedCompletedGoals,
+      isOwnProfile: res.locals.isOwnProfile,
+      isFollowing
+    };
+
+    res.locals.profileData = formattedData;
     return next();
   } catch (err) {
     // if DB error, catch that error and return to global error handler.
@@ -111,10 +193,19 @@ userController.getProfileData = async (req, res, next) => {
 
 userController.followUser = async (req, res, next) => {
   console.log('Toggling user follow');
+  if (!req.session.user) {
+    return next({
+      log: 'Express caught error in userController/followUser',
+      status: 400,
+      message: { err: 'User not logged in' }
+    });
+  }
+  const { user } = req.session;
+  const { userId: userToFollow } = req.params;
+  const { action } = req.body;
+  const userFollowing = user.id;
+
   try {
-    const { userId: userFollowing } = req.cookies;
-    const { userId: userToFollow } = req.params;
-    const { action } = req.body;
     console.log(userFollowing, userToFollow);
 
     switch (action) {
@@ -167,4 +258,5 @@ userController.followUser = async (req, res, next) => {
   }
 };
 
-module.exports = userController;
+// module.exports = userController;
+export default userController;

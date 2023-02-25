@@ -5,87 +5,43 @@ import {
   Collection,
   SearchFieldModal,
   Goal,
-  Board,
   FollowButton,
   ProfilePic
 } from '../../components';
-import { useLocation } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient, useQueries } from 'react-query';
+import { useLoaderData, useLocation, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import styles from './Profile.module.css';
-import useStore from '../../store';
+import useStore from '../../stores/store';
+import { fetchProfileQuery } from '../../queries';
 
-function getCookie(cname) {
-  let name = cname + '=';
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return '';
-}
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    console.log('Calling loader!');
+    const query = fetchProfileQuery(params.username);
+    return (
+      queryClient.getQueryData(query.queryKey) ??
+      (await queryClient.fetchQuery(query))
+    );
+  };
 
 export default function Profile() {
-  const loggedInAs = getCookie('loggedInAs');
-  const location = useLocation();
-  const username = location.pathname.slice(1);
-
+  const { username } = useParams();
   const [activeGoal, setActiveGoal] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
-  const [following, setFollowing] = useState(false);
-  const [ownProfile, setOwnProfile] = useState(false);
 
-  useEffect(() => {
-    if (loggedInAs === username) {
-      setOwnProfile(true);
-    }
-  }, [loggedInAs, username]);
-
-  const [publicQuery, privateQuery] = useQueries([
-    {
-      queryKey: 'public',
-      queryFn: async () => {
-        const response = await axios(`/api/user/${username}`);
-        console.log(response.data);
-        return response.data;
-      },
-      onSuccess: (data, variables, context) => {
-        console.log('Publc data received');
-        const { followedBy } = data;
-        const isFollowing = followedBy.some((user) => user.name === loggedInAs);
-        setFollowing(isFollowing);
-      }
-    },
-    {
-      queryKey: 'private',
-      queryFn: async () => {
-        console.log('Fetching private data');
-        const response = await axios('/api/goal', {
-          params: {
-            username: username
-          }
-        });
-        console.log('Private data', response.data);
-        if (!response.data) return [];
-        return response.data;
-      }
-    }
-  ]);
+  const profile = useQuery(fetchProfileQuery(username));
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(
+  const newGoalMutation = useMutation(
     (newGoal) => {
-      return axios.post('/api/goal', newGoal);
+      return axios.post('/api/goals', newGoal);
     },
     {
       onSuccess: (data, variables, context) => {
+        console.log('New goal posted');
         queryClient.invalidateQueries();
       }
     }
@@ -93,8 +49,8 @@ export default function Profile() {
 
   const followMutation = useMutation(
     (userIdToFollow) => {
-      return axios.post(`/api/user/follow/${userIdToFollow}`, {
-        action: following ? 'unfollow' : 'follow'
+      return axios.post(`/api/users/follow/${userIdToFollow}`, {
+        action: profile.data.isFollowing ? 'unfollow' : 'follow'
       });
     },
     {
@@ -102,22 +58,11 @@ export default function Profile() {
         console.log('Toggling follow state');
         console.log(data.data);
         const { data: action } = data;
-        setFollowing(action === 'follow');
+        //setFollowing(action === 'follow');
+        queryClient.invalidateQueries(fetchProfileQuery(username));
       }
     }
   );
-
-  const { isLoading, error, data } = publicQuery;
-
-  const {
-    isLoading: privateLoading,
-    error: privateError,
-    data: privateData
-  } = privateQuery;
-
-  if (isLoading) return 'Loading...';
-
-  if (error) return 'An error has occurred: ' + error.message;
 
   function toggleModal() {
     console.log('Toggling');
@@ -125,15 +70,20 @@ export default function Profile() {
   }
 
   function postNewGoal(goal) {
+    console.log('Posting new goal', goal);
     toggleModal();
-    mutation.mutate(goal);
+    newGoalMutation.mutate(goal);
   }
 
   function toggleFollow() {
-    followMutation.mutate(data.id);
+    followMutation.mutate(profile.data.id);
   }
 
   const addNew = <PathWidget toggleModal={toggleModal} />;
+
+  if (profile.isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -146,17 +96,20 @@ export default function Profile() {
       </aside>
       <article className={styles.wrapper}>
         <div className={styles.userWrapper}>
-          <ProfilePic avatarUrl={data.image} />
+          <ProfilePic avatarUrl={profile.data.image} />
           <h1 style={{ color: 'white' }}>{username}</h1>
-          {loggedInAs !== username && (
-            <FollowButton toggleFollow={toggleFollow} isFollowing={following} />
+          {!profile.data.isOwnProfile && (
+            <FollowButton
+              toggleFollow={toggleFollow}
+              isFollowing={profile.data.isFollowing}
+            />
           )}
         </div>
         <section className={styles.collection}>
           (
           <Collection
-            spires={privateData ? privateData : data.activegoals}
-            lastChild={ownProfile && addNew}
+            spires={profile.data.activeGoals}
+            lastChild={profile.data.isOwnProfile && addNew}
             handleFunc={(data) => setActiveGoal(data)}
           />
           )

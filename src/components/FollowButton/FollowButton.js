@@ -19,21 +19,6 @@ function FollowButton({ toggleFollow, isFollowing }) {
   }
 
   return (
-    // <button
-    //   onMouseEnter={mouseOver}
-    //   onMouseLeave={mouseOut}
-    //   onClick={toggleFollow}
-    //   className={`${styles.button} ${
-    //     buttonText === 'Unfollow'
-    //       ? styles.unfollow
-    //       : buttonText === 'Following'
-    //       ? styles.following
-    //       : null
-    //   }`}
-    // >
-    //   {buttonText}
-    // </button>
-
     <button
       onMouseEnter={mouseOver}
       onMouseLeave={mouseOut}

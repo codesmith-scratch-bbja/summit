@@ -1,52 +1,73 @@
-const express = require('express');
-const prisma = require('../db.js');
+import prisma from '../db.js';
+
+export function formatGoals(goals) {
+  const formatted = goals.map((goal) => {
+    const formattedTasks = goal.tasks.map((task) => {
+      const formattedTask = {
+        id: task.id,
+        title: task.title,
+        completed: task.completedUsers.length > 0
+      };
+      return formattedTask;
+    });
+    const formattedGoal = {
+      id: goal.id,
+      title: goal.title,
+      tasks: formattedTasks
+    };
+    return formattedGoal;
+  });
+  return formatted;
+}
 
 const goalController = {
   getUserGoals: async (req, res, next) => {
-    let username;
-    if (!req.query.username) {
-      username = req.cookies.loggedInAs;
-    } else {
-      username = req.query.username;
+    if (!req.session.user) {
+      console.log('Unauthorized');
+      return res.status(401).send('Unauthorized');
     }
-    console.log('Getting user goals', username);
+
+    // Destructure user object from session
+    const { user } = req.session;
+
     try {
-      const user = await prisma.user.findFirst({
-        where: {
-          name: username
-        },
-        select: {
-          id: true
-        }
-      });
+      console.log('Querying Db', user);
 
-      console.log('Querying Db');
-
-      const userGoals = await prisma.goal.findMany({
+      const userData = await prisma.user.findUnique({
         where: {
-          activeUsers: {
-            some: {
-              id: user.id
-            }
-          }
+          id: user.id
         },
         include: {
-          tasks: {
-            include: {
-              activeUsers: {
-                where: {
-                  id: user.id
-                },
+          activegoals: {
+            select: {
+              id: true,
+              title: true,
+              tasks: {
                 select: {
-                  name: true
+                  id: true,
+                  title: true,
+                  completedUsers: {
+                    where: {
+                      id: user.id
+                    }
+                  }
                 }
-              },
-              completedUsers: {
-                where: {
-                  id: user.id
-                },
+              }
+            }
+          },
+          completedGoals: {
+            select: {
+              id: true,
+              title: true,
+              tasks: {
                 select: {
-                  name: true
+                  id: true,
+                  title: true,
+                  completedUsers: {
+                    where: {
+                      id: user.id
+                    }
+                  }
                 }
               }
             }
@@ -54,13 +75,24 @@ const goalController = {
         }
       });
 
-      if (!userGoals) {
+      if (!userData) {
         console.log('No data found');
         res.locals.userGoals = [];
         return next();
       }
-      console.log({ userGoals });
-      res.locals.userGoals = userGoals;
+
+      const formattedActiveGoals = formatGoals(userData.activegoals);
+      const formattedCompletedGoals = formatGoals(userData.completedGoals);
+
+      const formattedData = {
+        name: userData.name,
+        image: userData.image,
+        activeGoals: formattedActiveGoals,
+        completedGoals: formattedCompletedGoals
+      };
+
+      console.log({ formattedData });
+      res.locals.userGoals = formattedData;
       next();
     } catch (err) {
       // if DB error, catch that error and return to global error handler.
@@ -103,12 +135,17 @@ const goalController = {
   },
   completeTask: async (req, res, next) => {
     console.log('Marking task complete');
-    //const userId = 'cleg4r33a00017frkqbg7abhg';
-    const { userId } = req.cookies;
+    if (!req.session.user) {
+      console.log('Unauthorized');
+      return res.status(401).send('Unauthorized');
+    }
+
+    // Destructure user object from session
+    const { user } = req.session;
 
     const toggled = await prisma.user.update({
       where: {
-        id: userId
+        id: user.id
       },
       data: {
         completedTasks: {
@@ -130,11 +167,17 @@ const goalController = {
   },
   uncompleteTask: async (req, res, next) => {
     console.log('Marking task as incomplete');
-    //const userId = 'cleg4r33a00017frkqbg7abhg';
-    const { userId } = req.cookies;
+    if (!req.session.user) {
+      console.log('Unauthorized');
+      return res.status(401).send('Unauthorized');
+    }
+
+    // Destructure user object from session
+    const { user } = req.session;
+
     const toggled = await prisma.user.update({
       where: {
-        id: userId
+        id: user.id
       },
       data: {
         completedTasks: {
@@ -153,7 +196,13 @@ const goalController = {
   },
   createGoal: async (req, res, next) => {
     console.log('Creating goal');
-    const userId = req.cookies.userId;
+    if (!req.session.user) {
+      console.log('Unauthorized');
+      return res.status(401).send('Unauthorized');
+    }
+
+    // Destructure user object from session
+    const { user } = req.session;
 
     try {
       // add to new path to DB.
@@ -165,7 +214,7 @@ const goalController = {
           title: req.body.title,
           activeUsers: {
             connect: {
-              id: userId
+              id: user.id
             }
           },
           tasks: {
@@ -174,7 +223,7 @@ const goalController = {
                 title: task.title,
                 activeUsers: {
                   connect: {
-                    id: userId
+                    id: user.id
                   }
                 }
               };
@@ -197,13 +246,17 @@ const goalController = {
 
   adoptGoal: async (req, res, next) => {
     console.log('Adopting goal');
-    const userId = req.cookies.userId;
+    if (!res.locals.authenticated) {
+      console.log('Unauthorized');
+      return res.status(401).send('Unauthorized');
+    }
+    const { user } = req.session;
     const goalToAdopt = req.body.goalId;
-    console.log('userId', userId, 'goalToAdopt', goalToAdopt);
+    console.log('userId', user.id, 'goalToAdopt', goalToAdopt);
     try {
       const adoptedGoal = await prisma.user.update({
         where: {
-          id: userId
+          id: user.id
         },
         data: {
           activegoals: {
@@ -264,17 +317,26 @@ const goalController = {
   },
   trendingGoals: async (req, res, next) => {
     console.log('Getting trending goals');
+
     const trendingGoals = await prisma.goal.findMany({
       where: {
         trending: true
       }
     });
+
     res.locals.trendingGoals = trendingGoals;
+
     next();
   },
   friendGoals: async (req, res, next) => {
     console.log('Getting friends goals');
-    const userId = req.cookies.userId;
+
+    if (!req.session.user) {
+      console.log('No user found');
+      res.locals.friendGoals = [];
+      return next();
+    }
+    const userId = req.session.user.id;
     // console.log(req.query);
     // const userId = req.query.userId;
     console.log({ userId });
@@ -323,4 +385,4 @@ const goalController = {
   }
 };
 
-module.exports = goalController;
+export default goalController;

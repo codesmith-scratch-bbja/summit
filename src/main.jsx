@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Home, Discover, Profile, Auth } from './pages';
+import { loader as profileLoader } from './pages/Profile';
 import { Layout, SideBar } from './components/';
 import {
   createBrowserRouter,
@@ -9,6 +10,9 @@ import {
 } from 'react-router-dom';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -26,6 +30,7 @@ const router = createBrowserRouter([
         <Profile />
       </Layout>
     ),
+    loader: profileLoader(queryClient),
     errorElement: <ErrorBoundary />
   },
   {
@@ -42,14 +47,13 @@ const router = createBrowserRouter([
   }
 ]);
 
-const queryClient = new QueryClient();
-
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
+  //</React.StrictMode>
 );
 
 function ErrorBoundary() {
