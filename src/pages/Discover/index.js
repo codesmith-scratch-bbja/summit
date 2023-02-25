@@ -10,7 +10,7 @@ import axios from 'axios';
 
 export default function Discover() {
   const { isLoading, error, data } = useQuery('goalData', async () => {
-    const response = await axios('/api/goal/trending');
+    const response = await axios('/api/goals/trending');
     console.log('DISCOVER DATA', response.data);
     return response.data;
   });

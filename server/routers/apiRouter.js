@@ -1,24 +1,25 @@
-//router boilerplate
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const goalRouter = require('./goalRouter');
-const authRouter = require('./authRouter');
-const userRouter = require('./userRouter');
+import goalsRouter from './goalsRouter.js';
+import authRouter from './authRouter.js';
+import usersRouter from './usersRouter.js';
 
+// Debug logging
 router.use((req, res, next) => {
   console.log('In the API router');
   next();
 });
 
+// Auth router - /api/auth
 router.use('/auth', authRouter);
-router.use('/goal', goalRouter);
-router.use('/user', userRouter);
 
-router.get('/profileredirect', (req, res, next) => {
-  console.log('Redirecting to profile');
-  const username = req.cookies.loggedInAs;
-  res.redirect(`/${username}`);
-});
+// Goals router - /api/goals
+router.use('/goals', goalsRouter);
 
-module.exports = router;
+// Users router - /api/users
+router.use('/users', usersRouter);
+
+// Tasks router - /api/tasks
+
+export default router;

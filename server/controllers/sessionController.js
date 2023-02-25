@@ -1,16 +1,13 @@
-const prisma = require('../db.js');
-const crypto = require('crypto');
+import prisma from '../db.js';
+import crypto from 'crypto';
+import session from 'express-session';
 
 const sessionController = {};
 
-/**
- * isLoggedIn - find the appropriate session for this request in the database, then
- * verify whether or not the session is still valid.
- */
 sessionController.isLoggedIn = async (req, res, next) => {
   console.log('Checking cookies');
 
-  const cookie = req.cookies.session;
+  const cookie = req.cookies['connect.sid'];
   console.log({ cookie });
 
   if (!cookie) {
@@ -34,36 +31,57 @@ sessionController.isLoggedIn = async (req, res, next) => {
   }
 
   console.log('Moving to next middleware');
-  res.locals.userId = foundSession.userId;
+  res.locals.id = foundSession.userId;
+  res.locals.username = foundSession.name;
+  res.locals.authenticated = true;
   next();
 };
 
-/**
- * startSession - create and save a new Session into the database.
- */
-sessionController.startSession = (req, res, next) => {
-  //Check if user already has a session
-  const userId = req.locals.userId;
+// Check if the session cookie is valid
+sessionController.isAuthenticated = async (req, res, next) => {
+  console.log('Checking session');
+  if (!req.session.user) {
+    console.log('No session found');
+    res.locals.authenticated = false;
+    return next();
+  }
 
-  const session = prisma.session.create(
-    {
-      data: {
-        userId: req.body.userId,
-        sessionId: crypto.randomBytes(18).toString('base64'),
-        expires: new Date(Date.now() + 30 * 60 * 1000)
-      }
-    },
-    (err, session) => {
-      if (err) {
-        return next(
-          'Error in sessionController.startSession: ' + JSON.stringify(err)
-        );
-      }
+  console.log('Session found');
+  console.log({ session: req.session });
+  res.locals.authenticated = true;
 
-      res.cookie('session', session.sessionId);
-      return next();
-    }
-  );
+  next();
 };
 
-module.exports = sessionController;
+// Start a new session after log in
+sessionController.startSession = (req, res, next) => {
+  console.log('Starting session');
+
+  // User data object to be stored in session
+  const userData = {
+    id: res.locals.id,
+    name: res.locals.name,
+    avatarUrl: res.locals.avatarUrl
+  };
+
+  // Assign session data to user field
+  req.session.user = userData;
+
+  // Redirect to profile
+  // This logic should change to redirect to the page the user was on before logging in
+  res.redirect(`http://localhost:8080/${userData.name}`);
+  next();
+};
+
+// Log out and end session
+sessionController.endSession = async (req, res, next) => {
+  console.log('Ending session');
+
+  res.clearCookie('connect.sid');
+
+  req.session.destroy();
+
+  res.redirect('http://localhost:8080/');
+};
+
+export default sessionController;

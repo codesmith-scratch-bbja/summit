@@ -1,18 +1,34 @@
-.buttons {
-  background-color: red;
-  font-family: 'Gloock';
-  border-radius: 10vh;
-  box-shadow: red;
+.add {
+  background-color: rgb(49, 187, 30);
+  border-radius: 10px;
+  color: rgb(10, 107, 15);
+  padding: 5px 10px;
+  border: solid 1px rgb(17, 128, 17);
+  cursor: pointer;
+}
+
+.cancel {
+  background-color: rgb(235, 69, 66);
+  color: rgb(110, 10, 10);
+  border-radius: 10px;
+  opacity: 0.75;
+  padding: 5px 10px;
+  border: solid 1px rgb(142, 24, 18);
+  cursor: pointer;
 }
 
 .wrapper {
-  background-color: white;
-  width: 500px;
+  background-color: rgb(255, 255, 255);
+  width: 420px;
+  color: black;
   position: absolute;
   left: 50%;
   top: 50%;
-  padding: 10px;
+  padding: 16px;
   border-radius: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
